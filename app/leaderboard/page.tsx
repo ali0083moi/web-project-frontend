@@ -18,7 +18,7 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("/api/leadboard");
+        const response = await axios.get("/api/leaderboard");
         setPlayers(response.data);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
