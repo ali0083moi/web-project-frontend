@@ -8,9 +8,9 @@ export default function Footer() {
         <div className="w-full flex justify-center">
           {/* About Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-center">درباره کوییز گیم</h3>
+            <h3 className="text-lg font-bold text-center">درباره کوئیزلند</h3>
             <p className="text-sm text-center">
-              کوییز گیم یک پلتفرم آنلاین برای یادگیری از طریق بازی و سرگرمی است.
+              کوئیزلند یک پلتفرم آنلاین برای یادگیری از طریق بازی و سرگرمی است.
               با ما همراه باشید و در مسابقات هیجان‌انگیز شرکت کنید.
             </p>
           </div>
@@ -19,7 +19,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-sm">
-            © {new Date().getFullYear()} کوییز گیم. تمامی حقوق محفوظ است.
+            © {new Date().getFullYear()} کوئیزلند. تمامی حقوق محفوظ است.
           </p>
         </div>
       </div>

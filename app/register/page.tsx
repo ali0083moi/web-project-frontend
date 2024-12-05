@@ -59,7 +59,7 @@ export default function Register() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">ثبت نام</h1>
-            <p className="text-white/80">به جمع کاربران کوییز گیم بپیوندید</p>
+            <p className="text-white/80">به جمع کاربران کوئیزلند بپیوندید</p>
           </div>
 
           {/* Register Form */}

@@ -44,9 +44,7 @@ export default function AboutUs() {
     <div className="min-h-screen pt-28 pb-10 bg-gradient-to-b from-purple-400 to-purple-600 dark:from-purple-900 dark:to-purple-950">
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white mb-20">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">
-          درباره کوییز گیم
-        </h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-6">درباره کوئیزلند</h1>
         <p className="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
           پلتفرم آموزشی تعاملی که یادگیری را به یک تجربه جذاب و سرگرم‌کننده
           تبدیل می‌کند

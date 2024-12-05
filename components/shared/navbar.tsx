@@ -1,123 +1,186 @@
 "use client";
+
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { ThemeToggle } from "../theme-toggle";
+import {
+  Bars3Icon as MenuIcon,
+  XMarkIcon as XIcon,
+} from "@heroicons/react/24/outline";
+
+interface User {
+  role: "player" | "designer" | null;
+  name: string;
+}
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/api/auth/check", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error("Auth check failed:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md">
+        <div className="container mx-auto px-4 py-3">
+          <div className="h-12 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-lg" />
+        </div>
+      </nav>
+    );
+  }
 
   return (
-    <nav
-      className="bg-neutral-200/80 dark:bg-neutral-800/80 backdrop-blur-sm text-white shadow-lg fixed top-0 w-full z-50"
-      dir="rtl"
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm"
     >
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between h-16">
-          {/* Logo and Brand */}
-          <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold">
-              کوییز گیم
-            </Link>
-          </div>
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
+          <Link
+            href="/"
+            className="text-2xl font-bold text-purple-600 dark:text-purple-400"
+          >
+            کوئیزلند
+          </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-4 space-x-reverse">
-            <Link
-              href="/leaderboard"
-              className="px-3 py-2 rounded-md hover:bg-gray-700 transition"
-            >
-              جدول امتیازات
-            </Link>
-            <Link
-              href="/about"
-              className="px-3 py-2 rounded-md hover:bg-gray-700 transition"
-            >
-              درباره ما
-            </Link>
-            <Link
-              href="/login"
-              className="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition mr-2"
-            >
-              ورود
-            </Link>
-            <Link
-              href="/register"
-              className="px-4 py-2 bg-green-600 rounded-md hover:bg-green-700 transition"
-            >
-              ثبت نام
-            </Link>
+          {/* Mobile Menu Toggle Button */}
+          <button
+            className="md:hidden text-gray-600 dark:text-gray-300"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? (
+              <XIcon className="h-6 w-6" />
+            ) : (
+              <MenuIcon className="h-6 w-6" />
+            )}
+          </button>
+
+          {/* Desktop Menu (Hidden on Mobile) */}
+          <div className="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
             <ThemeToggle />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md hover:bg-gray-700 focus:outline-none"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+            {user ? (
+              <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  {user.name}
+                </span>
+                <button
+                  onClick={async () => {
+                    await fetch("/api/auth/logout", {
+                      method: "POST",
+                      credentials: "include",
+                    });
+                    setUser(null);
+                  }}
+                  className="btn-secondary"
+                >
+                  خروج
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <Link href="/login" className="btn-secondary">
+                  ورود
+                </Link>
+                <Link href="/signup" className="btn-primary">
+                  ثبت نام
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Mobile Menu */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
-          }`}
+          className={`${
+            isMobileMenuOpen ? "max-h-screen" : "max-h-0"
+          } overflow-hidden transition-all duration-500 ease-in-out md:hidden`}
         >
-          <div className="px-2 pt-2 pb-3 space-y-2 text-right flex flex-col items-center w-full">
-            <Link
-              href="/leaderboard"
-              className="block px-3 py-2 rounded-md hover:bg-gray-700 transition"
-            >
-              جدول امتیازات
-            </Link>
-            <Link
-              href="/about"
-              className="block px-3 py-2 rounded-md hover:bg-gray-700 transition"
-            >
-              درباره ما
-            </Link>
-            <div className="flex flex-row items-center justify-center gap-4 w-full">
-              <Link
-                href="/login"
-                className="block px-3 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition"
-              >
-                ورود
-              </Link>
-              <Link
-                href="/register"
-                className="block px-3 py-2 bg-green-600 rounded-md hover:bg-blue-700 transition"
-              >
-                ثبت نام
-              </Link>
-            </div>
+          <div className="flex flex-col space-y-2 mt-2">
             <ThemeToggle />
+            {user ? (
+              <>
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  {user.name}
+                </span>
+                <button
+                  onClick={async () => {
+                    await fetch("/api/auth/logout", {
+                      method: "POST",
+                      credentials: "include",
+                    });
+                    setUser(null);
+                  }}
+                  className="btn-secondary"
+                >
+                  خروج
+                </button>
+                {user.role === "player" && (
+                  <>
+                    <Link href="/dashboard" className="nav-link">
+                      داشبورد
+                    </Link>
+                    <Link href="/leaderboard" className="nav-link">
+                      لیدربورد
+                    </Link>
+                    <Link href="/challenges" className="nav-link">
+                      چالش‌ها
+                    </Link>
+                  </>
+                )}
+                {user.role === "designer" && (
+                  <>
+                    <Link href="/designer/dashboard" className="nav-link">
+                      داشبورد طراح
+                    </Link>
+                    <Link href="/designer/questions" className="nav-link">
+                      مدیریت سوالات
+                    </Link>
+                    <Link href="/designer/analytics" className="nav-link">
+                      آمار و تحلیل
+                    </Link>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="btn-secondary">
+                  ورود
+                </Link>
+                <Link href="/signup" className="btn-primary">
+                  ثبت نام
+                </Link>
+                <Link href="/about" className="nav-link">
+                  درباره ما
+                </Link>
+                <Link href="/contact" className="nav-link">
+                  تماس با ما
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

@@ -7,8 +7,8 @@ import { ThemeProvider } from "./providers/theme-provider";
 import Footer from "@/components/shared/footer";
 
 export const metadata: Metadata = {
-  title: "کوییز گیم",
-  description: "کوییز گیم",
+  title: "کوئیزلند",
+  description: "کوئیزلند",
 };
 
 export default function RootLayout({

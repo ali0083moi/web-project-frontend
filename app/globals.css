@@ -43,3 +43,16 @@ body {
 .animate-float {
   animation: float infinite ease-in-out;
 }
+
+/* Add these utility classes for the navbar */
+.nav-link {
+  @apply text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors;
+}
+
+.btn-primary {
+  @apply bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors;
+}
