@@ -63,12 +63,18 @@ export default function Register() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle error response
         alert(data.error || "خطا در ثبت نام");
         return;
       }
 
-      // Registration successful
+      // Store token and user data
+      document.cookie = `auth-token=mock_jwt_token_12345; path=/; max-age=2592000; SameSite=Strict`;
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Trigger navbar update
+      window.dispatchEvent(new Event("auth-change"));
+
+      // Redirect to dashboard
       router.push("/dashboard");
     } catch (error) {
       alert("خطا در برقراری ارتباط با سرور");

@@ -39,6 +39,14 @@ export default function Navbar() {
     };
 
     checkAuth();
+
+    // Add event listener for auth changes
+    window.addEventListener("auth-change", checkAuth);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("auth-change", checkAuth);
+    };
   }, []);
 
   if (isLoading) {

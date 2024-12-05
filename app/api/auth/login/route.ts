@@ -13,6 +13,16 @@ const mockUsers = [
     followers: 200,
     picture_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali",
   },
+  {
+    id: "1235",
+    email: "test2@example.com",
+    password: "password123",
+    username: "Reza Ahmadi",
+    role: "designer",
+    followings: 400,
+    followers: 200,
+    picture_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Reza",
+  },
 ];
 
 export async function POST(request: Request) {

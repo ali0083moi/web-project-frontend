@@ -32,16 +32,15 @@ export default function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle error response
         alert(data.error || "خطا در ورود به حساب کاربری");
         return;
       }
 
-      // Store token and user data if needed
       document.cookie = `auth-token=${data.token}; path=/; max-age=2592000; SameSite=Strict`;
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Redirect to dashboard on success
+      window.dispatchEvent(new Event("auth-change"));
+
       router.push("/dashboard");
     } catch (error) {
       alert("خطا در برقراری ارتباط با سرور");
