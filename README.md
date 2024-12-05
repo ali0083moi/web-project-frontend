@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Game Platform Project
 
-## Getting Started
+A modern web application for gamers to connect, compete, and track their progress. Built with Next.js 14 and featuring a clean, responsive design.
 
-First, run the development server:
+## 🌟 Features
+
+- **Authentication System**
+
+  - User registration and login
+  - Session management with cookies
+  - Role-based access control (Player, Designer)
+
+- **User Profiles**
+
+  - Custom avatars using DiceBear API
+  - Following/Followers system
+  - Points tracking for players
+  - Profile customization
+
+- **Leaderboard System**
+  - Real-time rankings
+  - Points-based competition
+  - Performance tracking
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or later
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/ali0083moi/web-project-frontend.git
+cd game-platform
+```
+
+2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Frontend**
 
-## Learn More
+  - Next.js 14
+  - React
+  - TypeScript
+  - Tailwind CSS
 
-To learn more about Next.js, take a look at the following resources:
+- **Authentication**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  - Custom JWT implementation
+  - Secure cookie-based sessions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **API**
+  - Next.js API Routes
+  - RESTful architecture
 
-## Deploy on Vercel
+## 📁 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+├── app/
+│ ├── api/ # API routes
+│ ├── auth/ # Authentication pages
+│ ├── leaderboard/ # Leaderboard feature
+│ └── ...
+├── components/
+│ ├── shared/ # Reusable components
+│ └── ...
+├── public/ # Static assets
+└── ...
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔐 Authentication API Endpoints
+
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - New user registration
+- `GET /api/auth/check` - Check authentication status
+- `POST /api/auth/logout` - User logout
+
+## 👥 User Roles
+
+- **Player**
+
+  - Can participate in games
+  - Track points and rankings
+  - Follow other users
+
+- **Designer**
+  - Special privileges
+  - Access to design tools
+  - Custom profile features
+
+## 🎮 Mock Users for Testing
+
+```javascript
+// Test Player Account
+Email: test@example.com
+Password: password123
+// Test Designer Account
+Email: test2@example.com
+Password: password123
+```
+
+## 🙏 Acknowledgments
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [DiceBear Avatars](https://www.dicebear.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+---
