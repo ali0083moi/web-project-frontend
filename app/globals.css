@@ -21,9 +21,9 @@ body {
 }
 
 @font-face {
-  font-family: "Vazir";
-  src: url("/fonts/Vazir.woff2") format("woff2"),
-    url("/fonts/Vazir.woff") format("woff");
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn.woff2") format("woff2"),
+    url("/fonts/Vazirmatn.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
