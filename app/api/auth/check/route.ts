@@ -1,9 +1,21 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
+// Mock user data - should match the login route
+const mockUsers = [
+  {
+    id: "1234",
+    email: "test@example.com",
+    username: "Ali Ahmadi",
+    role: "player",
+    points: 1200,
+    followings: 400,
+    followers: 200,
+    picture_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali",
+  },
+];
+
 export async function GET() {
-  // Here you would typically verify the session/token from cookies
-  // and fetch the user data from your database
   const cookieStore = await cookies();
   const token = cookieStore.get("auth-token");
 
@@ -12,24 +24,14 @@ export async function GET() {
   }
 
   try {
-    // Verify token and get user data
-    // This is just an example - implement your actual auth logic here
-    const user = await verifyAuthToken(token.value);
+    // Since we're using a mock token, we'll just return the mock user
+    // In a real app, you would verify the JWT token here
+    if (token.value === "mock_jwt_token_12345") {
+      return NextResponse.json({ user: mockUsers[0] });
+    }
 
-    return NextResponse.json({ user });
+    return NextResponse.json({ user: null });
   } catch (error) {
     return NextResponse.json({ user: null });
   }
-}
-
-// Example function - implement your actual token verification
-async function verifyAuthToken(token: string) {
-  // Implement your token verification logic here
-  // Return user data if token is valid
-  // Throw error if token is invalid
-  return {
-    name: "John Doe",
-    role: "player",
-    // other user data...
-  };
 }

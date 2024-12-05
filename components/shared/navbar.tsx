@@ -8,6 +8,7 @@ import {
   Bars3Icon as MenuIcon,
   XMarkIcon as XIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 interface User {
   role: "player" | "designer" | null;
@@ -18,6 +19,7 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -86,11 +88,15 @@ export default function Navbar() {
                 </span>
                 <button
                   onClick={async () => {
-                    await fetch("/api/auth/logout", {
+                    const response = await fetch("/api/auth/logout", {
                       method: "POST",
                       credentials: "include",
                     });
-                    setUser(null);
+
+                    if (response.ok) {
+                      setUser(null);
+                      router.push("/");
+                    }
                   }}
                   className="btn-secondary"
                 >
@@ -102,7 +108,7 @@ export default function Navbar() {
                 <Link href="/login" className="btn-secondary">
                   ورود
                 </Link>
-                <Link href="/signup" className="btn-primary">
+                <Link href="/register" className="btn-primary">
                   ثبت نام
                 </Link>
               </div>
@@ -125,11 +131,16 @@ export default function Navbar() {
                 </span>
                 <button
                   onClick={async () => {
-                    await fetch("/api/auth/logout", {
+                    const response = await fetch("/api/auth/logout", {
                       method: "POST",
                       credentials: "include",
                     });
-                    setUser(null);
+
+                    if (response.ok) {
+                      setUser(null);
+                      setIsMobileMenuOpen(false);
+                      router.push("/");
+                    }
                   }}
                   className="btn-secondary"
                 >
@@ -137,26 +148,50 @@ export default function Navbar() {
                 </button>
                 {user.role === "player" && (
                   <>
-                    <Link href="/dashboard" className="nav-link">
+                    <Link
+                      href="/dashboard"
+                      className="nav-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       داشبورد
                     </Link>
-                    <Link href="/leaderboard" className="nav-link">
+                    <Link
+                      href="/leaderboard"
+                      className="nav-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       لیدربورد
                     </Link>
-                    <Link href="/challenges" className="nav-link">
+                    <Link
+                      href="/challenges"
+                      className="nav-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       چالش‌ها
                     </Link>
                   </>
                 )}
                 {user.role === "designer" && (
                   <>
-                    <Link href="/designer/dashboard" className="nav-link">
+                    <Link
+                      href="/designer/dashboard"
+                      className="nav-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       داشبورد طراح
                     </Link>
-                    <Link href="/designer/questions" className="nav-link">
+                    <Link
+                      href="/designer/questions"
+                      className="nav-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       مدیریت سوالات
                     </Link>
-                    <Link href="/designer/analytics" className="nav-link">
+                    <Link
+                      href="/designer/analytics"
+                      className="nav-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       آمار و تحلیل
                     </Link>
                   </>
@@ -164,16 +199,32 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link href="/login" className="btn-secondary">
+                <Link
+                  href="/login"
+                  className="btn-secondary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   ورود
                 </Link>
-                <Link href="/signup" className="btn-primary">
+                <Link
+                  href="/register"
+                  className="btn-primary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   ثبت نام
                 </Link>
-                <Link href="/about" className="nav-link">
+                <Link
+                  href="/about"
+                  className="nav-link"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   درباره ما
                 </Link>
-                <Link href="/contact" className="nav-link">
+                <Link
+                  href="/contact"
+                  className="nav-link"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   تماس با ما
                 </Link>
               </>

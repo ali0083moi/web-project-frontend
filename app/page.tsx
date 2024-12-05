@@ -32,7 +32,7 @@ export default function Home() {
         </p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Link
-            href="/signup"
+            href="/register"
             className="bg-white text-purple-600 dark:bg-gray-800 dark:text-purple-400 px-8 py-4 rounded-full font-bold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl"
           >
             شروع بازی
@@ -117,7 +117,7 @@ export default function Home() {
           </h3>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
-              href="/signup"
+              href="/register"
               className="bg-white text-purple-600 px-12 py-4 rounded-full font-bold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl inline-block"
             >
               همین حالا شروع کنید

@@ -45,11 +45,36 @@ export default function Register() {
 
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.name,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          role: formData.role,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle error response
+        alert(data.error || "خطا در ثبت نام");
+        return;
+      }
+
+      // Registration successful
       router.push("/dashboard");
-    }, 1500);
+    } catch (error) {
+      alert("خطا در برقراری ارتباط با سرور");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
