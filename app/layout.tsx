@@ -17,19 +17,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning>
-      <body className="font-vazir h-screen flex flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Navbar />
-          <main className="w-full flex-grow">{children}</main>
-          <Footer />
-        </ThemeProvider>
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang="fa" dir="rtl" suppressHydrationWarning>
+        <body className="font-vazir h-screen flex flex-col">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            <main className="w-full flex-grow">{children}</main>
+            <Footer />
+          </ThemeProvider>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }

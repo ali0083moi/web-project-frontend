@@ -12,6 +12,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        silver: "#C0C0C0",
+        bronze: "#CD7F32",
       },
     },
   },
