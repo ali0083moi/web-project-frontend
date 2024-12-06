@@ -36,7 +36,11 @@ export default function Leaderboard() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-400 to-purple-600 dark:from-purple-900 dark:to-purple-950">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent"></div>
+      </div>
+    );
   }
 
   return (

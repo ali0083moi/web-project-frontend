@@ -92,7 +92,7 @@ export default function Navbar() {
               <div className="flex items-center space-x-4 rtl:space-x-reverse">
                 {user.role === "player" && (
                   <>
-                    <Link href="/dashboard" className="nav-link">
+                    <Link href="/player/dashboard" className="nav-link">
                       داشبورد
                     </Link>
                     <Link href="/leaderboard" className="nav-link">

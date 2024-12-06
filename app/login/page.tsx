@@ -40,8 +40,11 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       window.dispatchEvent(new Event("auth-change"));
-
-      router.push("/dashboard");
+      if (data.user.role === "player") {
+        router.push("/player/dashboard");
+      } else {
+        router.push("/designer/dashboard");
+      }
     } catch (error) {
       alert("خطا در برقراری ارتباط با سرور");
     } finally {
