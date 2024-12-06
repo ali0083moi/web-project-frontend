@@ -88,12 +88,34 @@ export default function Navbar() {
 
           {/* Desktop Menu (Hidden on Mobile) */}
           <div className="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
-            <ThemeToggle />
             {user ? (
               <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  {user.name}
-                </span>
+                {user.role === "player" && (
+                  <>
+                    <Link href="/dashboard" className="nav-link">
+                      داشبورد
+                    </Link>
+                    <Link href="/leaderboard" className="nav-link">
+                      لیدربورد
+                    </Link>
+                    <Link href="/challenges" className="nav-link">
+                      چالش‌ها
+                    </Link>
+                  </>
+                )}
+                {user.role === "designer" && (
+                  <>
+                    <Link href="/designer/dashboard" className="nav-link">
+                      داشبورد طراح
+                    </Link>
+                    <Link href="/designer/questions" className="nav-link">
+                      مدیریت سوالات
+                    </Link>
+                    <Link href="/designer/analytics" className="nav-link">
+                      آمار و تحلیل
+                    </Link>
+                  </>
+                )}
                 <button
                   onClick={async () => {
                     const response = await fetch("/api/auth/logout", {
@@ -113,6 +135,12 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <Link href="/about" className="nav-link">
+                  درباره ما
+                </Link>
+                <Link href="/contact" className="nav-link">
+                  تماس با ما
+                </Link>
                 <Link href="/login" className="btn-secondary">
                   ورود
                 </Link>
@@ -121,6 +149,7 @@ export default function Navbar() {
                 </Link>
               </div>
             )}
+            <ThemeToggle />
           </div>
         </div>
 
@@ -131,12 +160,8 @@ export default function Navbar() {
           } overflow-hidden transition-all duration-500 ease-in-out md:hidden`}
         >
           <div className="flex flex-col space-y-2 mt-2">
-            <ThemeToggle />
             {user ? (
               <>
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  {user.name}
-                </span>
                 <button
                   onClick={async () => {
                     const response = await fetch("/api/auth/logout", {
@@ -237,6 +262,7 @@ export default function Navbar() {
                 </Link>
               </>
             )}
+            <ThemeToggle />
           </div>
         </div>
       </div>
