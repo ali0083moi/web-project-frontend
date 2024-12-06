@@ -40,6 +40,7 @@ function generateRandomUsers(count: number) {
       avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
         username
       )}`,
+      followed: Math.random() < 0.5,
     };
   });
 }

@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Mock successful registration
+    // Mock successful registration - only return success message
     return NextResponse.json(
       {
         message: "User registered successfully",

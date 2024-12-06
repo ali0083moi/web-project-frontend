@@ -8,11 +8,13 @@ interface User {
   points: number;
   role: string;
   avatar_url: string;
+  followed: boolean;
 }
 
 interface UserCardProps {
   user: User;
   onFollow: (userId: string) => void;
+  onUnfollow: (userId: string) => void;
   onShowDetails: (userId: string) => void;
   getAvatarUrl: (username: string) => string;
 }
@@ -20,6 +22,7 @@ interface UserCardProps {
 export default function UserCard({
   user,
   onFollow,
+  onUnfollow,
   onShowDetails,
   getAvatarUrl,
 }: UserCardProps) {
@@ -50,12 +53,16 @@ export default function UserCard({
           </div>
           <div className="flex gap-3 w-full">
             <Button
-              onClick={() => onFollow(user.id)}
-              className="flex-1 bg-gradient-to-r from-purple-500/20 to-green-500/20 hover:bg-gradient-to-r hover:from-purple-500/40 hover:to-green-500/40 text-white border-0 transition-all duration-300 backdrop-blur-sm hover:scale-105 shadow-lg hover:shadow-purple-500/25 p-2 w-1/2"
-              variant="outline"
+              className={`w-full ${
+                user.followed
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-purple-500 hover:bg-purple-600"
+              }`}
+              onClick={() =>
+                user.followed ? onUnfollow(user.id) : onFollow(user.id)
+              }
             >
-              <UserPlus className="w-4 h-4 ml-2 animate-pulse" />
-              دنبال کردن
+              {user.followed ? "دنبال نکردن" : "دنبال کردن"}
             </Button>
             <Button
               onClick={() => onShowDetails(user.id)}

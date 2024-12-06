@@ -67,15 +67,11 @@ export default function Register() {
         return;
       }
 
-      // Store token and user data
-      document.cookie = `auth-token=mock_jwt_token_12345; path=/; max-age=2592000; SameSite=Strict`;
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // Show success message
+      alert("ثبت نام با موفقیت انجام شد. لطفاً وارد شوید.");
 
-      // Trigger navbar update
-      window.dispatchEvent(new Event("auth-change"));
-
-      // Redirect to dashboard
-      router.push("/dashboard");
+      // Redirect to login page
+      router.push("/login");
     } catch (error) {
       alert("خطا در برقراری ارتباط با سرور");
     } finally {

@@ -20,6 +20,7 @@ interface User {
   points: number;
   role: string;
   avatar_url: string;
+  followed: boolean;
 }
 
 interface UserDetails extends User {
@@ -66,10 +67,36 @@ export default function UsersPage() {
         },
       });
       if (response.ok) {
+        setUsers(
+          users.map((user) =>
+            user.id === userId ? { ...user, followed: true } : user
+          )
+        );
         alert("با موفقیت دنبال شد!");
       }
     } catch (error) {
       console.error("Error following user:", error);
+    }
+  };
+
+  const handleUnfollow = async (userId: string) => {
+    try {
+      const response = await fetch(`/api/users/${userId}/unfollow`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (response.ok) {
+        setUsers(
+          users.map((user) =>
+            user.id === userId ? { ...user, followed: false } : user
+          )
+        );
+        alert("با موفقیت لغو دنبال شد!");
+      }
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
     }
   };
 
@@ -190,6 +217,7 @@ export default function UsersPage() {
               key={user.id}
               user={user}
               onFollow={handleFollow}
+              onUnfollow={handleUnfollow}
               onShowDetails={handleShowDetails}
               getAvatarUrl={getAvatarUrl}
             />
