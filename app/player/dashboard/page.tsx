@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy } from "lucide-react";
+import { Trophy, Dices, Users, Brain } from "lucide-react";
 import QuestionsTable from "@/components/QuestionsTable";
+import Link from "next/link";
 
 interface DashboardUser {
   id: string;
@@ -78,15 +79,20 @@ export default function PlayerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-400 to-purple-600 dark:from-purple-900 dark:to-purple-950 pt-28 pb-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-purple-400 to-purple-600 dark:from-purple-900 dark:to-purple-950 py-28 px-4">
       <div className="container mx-auto max-w-7xl">
         {/* Profile Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 mb-8"
+          className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 mb-8 relative overflow-hidden"
         >
-          <div className="flex flex-col md:flex-row items-center gap-8">
+          {/* Decorative Background Icon */}
+          <div className="absolute -left-20 top-1/2 -translate-y-1/2 transform rotate-12 opacity-5 hidden md:block">
+            <Trophy className="w-80 h-80 text-white" />
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
             <div className="relative">
               <img
                 src={user.avatar_url}
@@ -126,6 +132,47 @@ export default function PlayerDashboard() {
               </div>
             </div>
           </div>
+        </motion.div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 w-full"
+        >
+          <Link href="/questions" className="w-full">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white px-6 py-4 rounded-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <Brain className="w-6 h-6" />
+              <span>انتخاب سوال جدید</span>
+            </motion.button>
+          </Link>
+
+          <Link className="w-full" href="/random-question">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <Dices className="w-6 h-6" />
+              <span>سوال تصادفی</span>
+            </motion.button>
+          </Link>
+
+          <Link className="w-full" href="/users">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-4 rounded-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <Users className="w-6 h-6" />
+              <span>یافتن کاربران جدید</span>
+            </motion.button>
+          </Link>
         </motion.div>
 
         {/* Questions Table */}
