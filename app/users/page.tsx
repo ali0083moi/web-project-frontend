@@ -25,9 +25,6 @@ interface User {
 }
 
 interface UserDetails extends User {
-  bio?: string;
-  email?: string;
-  joinedAt: string;
   followers: number;
   following: number;
 }
@@ -264,23 +261,38 @@ export default function UsersPage() {
       {/* User Details Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent
-          className="max-w-md mx-auto bg-gradient-to-b from-purple-400 to-purple-600 dark:from-purple-900 dark:to-purple-950 border-0 text-white"
+          className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-gradient-to-b from-purple-400 to-purple-600 dark:from-purple-900 dark:to-purple-950 border-0 text-white p-6 rounded-2xl shadow-2xl w-11/12 md:w-full"
           dir="rtl"
         >
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="absolute left-4 top-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200 group"
+          >
+            <svg
+              className="w-5 h-5 text-white/80 group-hover:text-white"
+              fill="none"
+              strokeWidth="2.5"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
           {selectedUser && (
             <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold text-center mb-4 text-white">
+              <DialogHeader className="space-y-4">
+                <DialogTitle className="text-2xl font-bold text-center text-white">
                   مشخصات کاربر
                 </DialogTitle>
               </DialogHeader>
               <div className="flex flex-col items-center space-y-4">
                 <div className="w-24 h-24 rounded-full overflow-hidden">
                   <img
-                    src={
-                      selectedUser.avatar_url ||
-                      getAvatarUrl(selectedUser.username)
-                    }
+                    src={selectedUser.avatar_url}
                     alt={selectedUser.username}
                     className="w-full h-full object-cover"
                   />
@@ -294,33 +306,17 @@ export default function UsersPage() {
 
                 <div className="grid grid-cols-2 gap-4 w-full">
                   <div className="text-center p-3 bg-white/10 rounded-lg">
-                    <div className="text-sm text-white/80">دنبال���کنندگان</div>
+                    <div className="text-sm text-white/80">دنبال‌کنندگان</div>
                     <div className="font-bold text-white">
                       {selectedUser.followers}
                     </div>
                   </div>
                   <div className="text-center p-3 bg-white/10 rounded-lg">
-                    <div className="text-sm text-white/80">دنبال‌شده‌ها</div>
+                    <div className="text-sm text-white/80">نبال‌شده‌ها</div>
                     <div className="font-bold text-white">
                       {selectedUser.following}
                     </div>
                   </div>
-                </div>
-
-                {selectedUser.bio && (
-                  <div className="w-full">
-                    <div className="text-sm text-white/80 mb-1">بیوگرافی</div>
-                    <p className="text-sm text-white">{selectedUser.bio}</p>
-                  </div>
-                )}
-
-                <div className="w-full">
-                  <div className="text-sm text-white/80 mb-1">تاریخ عضویت</div>
-                  <p className="text-sm text-white">
-                    {new Date(selectedUser.joinedAt).toLocaleDateString(
-                      "fa-IR"
-                    )}
-                  </p>
                 </div>
 
                 <div className="flex items-center justify-center space-x-2 space-x-reverse">
