@@ -29,7 +29,7 @@ export async function POST(request: Request) {
           id: "123",
           username: username || "Ali Ahmadi",
           email: email || "example@email.com",
-          picture_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali",
+          avatar_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali",
           role: role || "designer",
           points: 0,
         },

@@ -11,7 +11,7 @@ const mockUsers = [
     points: 1200,
     followings: 400,
     followers: 200,
-    picture_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali",
+    avatar_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali",
   },
   {
     id: "1235",
@@ -20,7 +20,7 @@ const mockUsers = [
     role: "designer",
     followings: 400,
     followers: 200,
-    picture_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Reza",
+    avatar_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Reza",
   },
 ];
 

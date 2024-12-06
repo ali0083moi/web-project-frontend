@@ -198,7 +198,7 @@ export default function UsersPage() {
             <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60" />
             <Input
               type="text"
-              placeholder="جستجو بر اساس نام یا نقش..."
+              placeholder="جستجو بر اساس نام..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-4 pr-12 w-full h-12 text-lg bg-white/10 border-white/20 text-white placeholder:text-white/60"
