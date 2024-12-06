@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 interface Player {
+  id: string;
   rank: number;
   username: string;
   points: number;
-  avatarUrl: string;
+  avatar_url: string;
 }
 
 export default function Leaderboard() {
@@ -18,8 +19,12 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("/api/leaderboard");
-        setPlayers(response.data);
+        const response = await axios.get("/api/leaderboard", {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+          },
+        });
+        setPlayers(response.data.leaderboard);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
       } finally {
@@ -47,7 +52,7 @@ export default function Leaderboard() {
           <div className="text-center">
             <div className="relative">
               <img
-                src={players[1]?.avatarUrl}
+                src={players[1]?.avatar_url}
                 alt={players[1]?.username}
                 className="w-24 h-24 rounded-full border-4 border-silver bg-white"
               />
@@ -74,7 +79,7 @@ export default function Leaderboard() {
                 </svg>
               </div>
               <img
-                src={players[0]?.avatarUrl}
+                src={players[0]?.avatar_url}
                 alt={players[0]?.username}
                 className="w-32 h-32 rounded-full border-4 border-yellow-400 bg-white"
               />
@@ -92,7 +97,7 @@ export default function Leaderboard() {
           <div className="text-center">
             <div className="relative">
               <img
-                src={players[2]?.avatarUrl}
+                src={players[2]?.avatar_url}
                 alt={players[2]?.username}
                 className="w-24 h-24 rounded-full border-4 border-bronze bg-white"
               />
@@ -119,7 +124,7 @@ export default function Leaderboard() {
                   {player.rank}
                 </span>
                 <img
-                  src={player.avatarUrl}
+                  src={player.avatar_url}
                   alt={player.username}
                   className="w-12 h-12 rounded-full bg-white"
                 />
