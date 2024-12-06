@@ -54,8 +54,21 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Generate 50 random users
-    const users = generateRandomUsers(50);
+    // Get search query from URL
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get("query")?.toLowerCase();
+
+    // Generate all users
+    const allUsers = generateRandomUsers(50);
+
+    // If there's a search query, filter the users
+    const users = query
+      ? allUsers.filter(
+          (user) =>
+            user.username.toLowerCase().includes(query) ||
+            user.role.toLowerCase().includes(query)
+        )
+      : allUsers;
 
     return NextResponse.json({ users });
   } catch (error) {

@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import UserCard from "@/components/UserCard";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface User {
   id: string;
@@ -34,13 +35,18 @@ interface UserDetails extends User {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState<UserDetails | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    if (debouncedSearchQuery) {
+      searchUsers(debouncedSearchQuery);
+    } else {
+      fetchUsers();
+    }
+  }, [debouncedSearchQuery]);
 
   const fetchUsers = async () => {
     try {
@@ -54,6 +60,26 @@ export default function UsersPage() {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching users:", error);
+      setLoading(false);
+    }
+  };
+
+  const searchUsers = async (query: string) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `/api/users?query=${encodeURIComponent(query)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setUsers(data.users);
+    } catch (error) {
+      console.error("Error searching users:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -268,7 +294,7 @@ export default function UsersPage() {
 
                 <div className="grid grid-cols-2 gap-4 w-full">
                   <div className="text-center p-3 bg-white/10 rounded-lg">
-                    <div className="text-sm text-white/80">دنبال‌کنندگان</div>
+                    <div className="text-sm text-white/80">دنبال���کنندگان</div>
                     <div className="font-bold text-white">
                       {selectedUser.followers}
                     </div>
