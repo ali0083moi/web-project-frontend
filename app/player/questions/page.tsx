@@ -19,6 +19,13 @@ interface Question {
   difficulty: string;
 }
 
+interface QuestionDetail extends Question {
+  option1: string;
+  option2: string;
+  option3: string;
+  option4: string;
+}
+
 const categories = [
   "همه",
   "تاریخ",
@@ -38,9 +45,8 @@ export default function QuestionsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("همه");
   const [selectedDifficulty, setSelectedDifficulty] = useState("همه");
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
-    null
-  );
+  const [selectedQuestion, setSelectedQuestion] =
+    useState<QuestionDetail | null>(null);
 
   useEffect(() => {
     fetchQuestions();
@@ -73,6 +79,20 @@ export default function QuestionsPage() {
       console.error("Error fetching questions:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchQuestionDetails = async (id: string) => {
+    try {
+      const response = await axios.get(`/api/questions/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching question details:", error);
+      return null;
     }
   };
 
@@ -227,23 +247,81 @@ export default function QuestionsPage() {
                 <Dialog>
                   <DialogTrigger asChild>
                     <button
-                      onClick={() => setSelectedQuestion(question)}
-                      className="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-300"
+                      onClick={async () => {
+                        const details = await fetchQuestionDetails(question.id);
+                        setSelectedQuestion(details);
+                      }}
+                      className="w-full bg-white/10 hover:bg-white/20 text-white py-2.5 px-4 rounded-xl 
+                               transition-all duration-300 flex items-center justify-center gap-2
+                               hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg"
                     >
-                      پاسخ به سوال
+                      <span>پاسخ به سوال</span>
+                      <motion.div
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        transition={{ repeat: Infinity, duration: 1.5 }}
+                      >
+                        ⭐
+                      </motion.div>
                     </button>
                   </DialogTrigger>
-                  <DialogContent className="bg-purple-900 text-white">
-                    <DialogHeader>
-                      <DialogTitle className="text-right">
+                  <DialogContent
+                    className="bg-gradient-to-br from-purple-900 to-purple-950 text-white 
+                                             border-none shadow-2xl max-w-2xl w-[95%] rounded-2xl"
+                  >
+                    <DialogHeader className="space-y-4">
+                      <div className="flex items-center gap-3 bg-white/5 p-4 rounded-xl">
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(
+                            selectedQuestion?.difficulty || ""
+                          )}`}
+                        >
+                          {selectedQuestion?.difficulty === "easy"
+                            ? "آسان"
+                            : selectedQuestion?.difficulty === "medium"
+                            ? "متوسط"
+                            : "سخت"}
+                        </span>
+                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                          {selectedQuestion?.category}
+                        </span>
+                      </div>
+                      <DialogTitle className="text-right text-xl font-bold leading-relaxed">
                         {selectedQuestion?.text}
                       </DialogTitle>
                     </DialogHeader>
-                    <div className="text-right">
-                      {/* Answer form will be added here when the endpoint is ready */}
-                      <p className="text-white/80">
-                        این بخش پس از آماده شدن API پاسخ به سوال تکمیل خواهد شد.
-                      </p>
+
+                    <div className="text-right mt-6">
+                      {selectedQuestion && (
+                        <div className="grid grid-cols-1 gap-4">
+                          {[
+                            selectedQuestion.option1,
+                            selectedQuestion.option2,
+                            selectedQuestion.option3,
+                            selectedQuestion.option4,
+                          ].map((option, index) => (
+                            <motion.button
+                              key={index}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="w-full text-right px-6 py-4 rounded-xl
+                                                 bg-white/5 hover:bg-white/15 
+                                                 transition-all duration-300
+                                                 border border-white/10 hover:border-white/20
+                                                 flex items-center gap-4 group"
+                            >
+                              <span
+                                className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center
+                                                 text-white/70 group-hover:bg-white/20 transition-all"
+                              >
+                                {String.fromCharCode(65 + index)}
+                              </span>
+                              <span className="flex-1">{option}</span>
+                            </motion.button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </DialogContent>
                 </Dialog>
