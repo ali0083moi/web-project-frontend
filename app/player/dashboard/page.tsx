@@ -141,7 +141,7 @@ export default function PlayerDashboard() {
           transition={{ delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 w-full"
         >
-          <Link href="/questions" className="w-full">
+          <Link href="/player/questions" className="w-full">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -152,16 +152,15 @@ export default function PlayerDashboard() {
             </motion.button>
           </Link>
 
-          <Link className="w-full" href="/random-question">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              <Dices className="w-6 h-6" />
-              <span>سوال تصادفی</span>
-            </motion.button>
-          </Link>
+          <motion.button
+            onClick={() => {}}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+          >
+            <Dices className="w-6 h-6" />
+            <span>سوال تصادفی</span>
+          </motion.button>
 
           <Link className="w-full" href="/users">
             <motion.button
