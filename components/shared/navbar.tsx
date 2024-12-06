@@ -98,7 +98,7 @@ export default function Navbar() {
                     <Link href="/leaderboard" className="nav-link">
                       لیدربورد
                     </Link>
-                    <Link href="/challenges" className="nav-link">
+                    <Link href="/player/questions" className="nav-link">
                       چالش‌ها
                     </Link>
                   </>
@@ -196,7 +196,7 @@ export default function Navbar() {
                       لیدربورد
                     </Link>
                     <Link
-                      href="/challenges"
+                      href="/player/questions"
                       className="nav-link"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
