@@ -2,9 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Dices, Users, Brain } from "lucide-react";
+import { Trophy, Dices, Users, Brain, X } from "lucide-react";
 import QuestionsTable from "@/components/QuestionsTable";
+import QuestionBox from "@/components/QuestionBox";
 import Link from "next/link";
+import axios from "axios";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface DashboardUser {
   id: string;
@@ -26,10 +36,44 @@ interface Question {
   is_correct: boolean;
 }
 
+interface RandomQuestion {
+  id: string;
+  text: string;
+  category: string;
+  difficulty: string;
+  option1: string;
+  option2: string;
+  option3: string;
+  option4: string;
+}
+
 export default function PlayerDashboard() {
   const [user, setUser] = useState<DashboardUser | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
+  const [randomQuestion, setRandomQuestion] = useState<RandomQuestion | null>(
+    null
+  );
+  const [showRandomQuestion, setShowRandomQuestion] = useState(false);
+
+  const handleRandomQuestion = async () => {
+    try {
+      const response = await axios.get("/api/questions/random", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setRandomQuestion(response.data);
+      setShowRandomQuestion(true);
+    } catch (error) {
+      console.error("Error fetching random question:", error);
+    }
+  };
+
+  const handleQuestionClose = () => {
+    setShowRandomQuestion(false);
+    setRandomQuestion(null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -152,15 +196,59 @@ export default function PlayerDashboard() {
             </motion.button>
           </Link>
 
-          <motion.button
-            onClick={() => {}}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+          <Dialog
+            open={showRandomQuestion}
+            onOpenChange={setShowRandomQuestion}
           >
-            <Dices className="w-6 h-6" />
-            <span>سوال تصادفی</span>
-          </motion.button>
+            <DialogTrigger asChild>
+              <motion.button
+                onClick={handleRandomQuestion}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                <Dices className="w-6 h-6" />
+                <span>سوال تصادفی</span>
+              </motion.button>
+            </DialogTrigger>
+
+            <DialogContent className="bg-transparent border-none p-0">
+              <DialogHeader>
+                <DialogTitle className="sr-only">سوال تصادفی</DialogTitle>
+                <div className="absolute left-1/2 -translate-x-1/2 top-[100%] z-50 flex gap-2">
+                  <motion.button
+                    onClick={handleRandomQuestion}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-colors"
+                  >
+                    <Dices className="w-5 h-5 text-white" />
+                  </motion.button>
+                  <DialogClose asChild>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-colors"
+                    >
+                      <X className="w-5 h-5 text-white" />
+                    </motion.button>
+                  </DialogClose>
+                </div>
+              </DialogHeader>
+              {randomQuestion && (
+                <QuestionBox
+                  question={{
+                    id: randomQuestion.id,
+                    text: randomQuestion.text,
+                    category: randomQuestion.category,
+                    difficulty: randomQuestion.difficulty,
+                  }}
+                  index={0}
+                  onQuestionClose={handleQuestionClose}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
 
           <Link className="w-full" href="/users">
             <motion.button
