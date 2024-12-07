@@ -212,7 +212,7 @@ export default function PlayerDashboard() {
               </motion.button>
             </DialogTrigger>
 
-            <DialogContent className="bg-transparent border-none p-0">
+            <DialogContent className="bg-transparent border-none p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-auto">
               <DialogHeader>
                 <DialogTitle className="sr-only">سوال تصادفی</DialogTitle>
                 <div className="absolute left-1/2 -translate-x-1/2 top-[100%] z-50 flex gap-2">
