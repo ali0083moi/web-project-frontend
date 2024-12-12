@@ -224,7 +224,7 @@ const questions = {
   },
   "23": {
     id: "23",
-    text: "عمیق‌ترین نقطه اقیانوس‌ها کجاست؟",
+    text: "عمیق‌تری�� نقطه اقیانوس‌ها کجاست؟",
     category: "جغرافیا",
     difficulty: "hard",
     option1: "گودال ماریانا",
@@ -523,4 +523,110 @@ export async function GET(
   }
 
   return NextResponse.json(question);
+}
+
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const headersList = await headers();
+  const token = headersList.get("authorization");
+
+  if (!token || !token.startsWith("Bearer ")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const id = params.id;
+  const question = questions[id as keyof typeof questions];
+
+  if (!question) {
+    return NextResponse.json({ error: "Question not found" }, { status: 404 });
+  }
+
+  const body = await request.json();
+  const {
+    text,
+    option1,
+    option2,
+    option3,
+    option4,
+    correct_answer,
+    difficulty_level,
+    category_id,
+  } = body;
+
+  // Validate required fields
+  if (
+    !text ||
+    !option1 ||
+    !option2 ||
+    !option3 ||
+    !option4 ||
+    !correct_answer ||
+    !difficulty_level ||
+    !category_id
+  ) {
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
+
+  // Map category_id to category name
+  const categoryMap: { [key: number]: string } = {
+    1: "جغرافیا",
+    2: "کامپیوتر",
+    3: "نجوم",
+    4: "فیزیک",
+    5: "شیمی",
+    6: "تاریخ",
+    7: "زیست‌شناسی",
+    8: "پزشکی",
+  };
+
+  // Update question
+  questions[id as keyof typeof questions] = {
+    ...question,
+    text,
+    category: categoryMap[category_id] || "سایر",
+    difficulty: difficulty_level,
+    option1,
+    option2,
+    option3,
+    option4,
+  };
+
+  return NextResponse.json({
+    message: "Question updated successfully",
+    question: {
+      id,
+      text,
+    },
+  });
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const headersList = await headers();
+  const token = headersList.get("authorization");
+
+  if (!token || !token.startsWith("Bearer ")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const id = params.id;
+  const question = questions[id as keyof typeof questions];
+
+  if (!question) {
+    return NextResponse.json({ error: "Question not found" }, { status: 404 });
+  }
+
+  // Delete the question
+  delete questions[id as keyof typeof questions];
+
+  return NextResponse.json({
+    message: "Question deleted successfully",
+  });
 }

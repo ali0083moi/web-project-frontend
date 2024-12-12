@@ -306,6 +306,97 @@ const questions = {
   ],
 };
 
+interface NewQuestion {
+  text: string;
+  option1: string;
+  option2: string;
+  option3: string;
+  option4: string;
+  correct_answer: number;
+  difficulty_level: string;
+  category_id: number;
+}
+
+export async function POST(request: Request) {
+  try {
+    const headersList = await headers();
+    const token = headersList.get("authorization");
+
+    if (!token || !token.startsWith("Bearer ")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      text,
+      option1,
+      option2,
+      option3,
+      option4,
+      correct_answer,
+      difficulty_level,
+      category_id,
+    } = body;
+
+    // Validate required fields
+    if (
+      !text ||
+      !option1 ||
+      !option2 ||
+      !option3 ||
+      !option4 ||
+      !correct_answer ||
+      !difficulty_level ||
+      !category_id
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Map category_id to category name (simplified mapping)
+    const categoryMap: { [key: number]: string } = {
+      1: "جغرافیا",
+      2: "کامپیوتر",
+      3: "نجوم",
+      4: "فیزیک",
+      5: "شیمی",
+      6: "تاریخ",
+      7: "زیست‌شناسی",
+      8: "پزشکی",
+    };
+
+    // Create new question
+    const newQuestion = {
+      id: (questions.questions.length + 1).toString(),
+      text,
+      category: categoryMap[category_id] || "سایر",
+      difficulty: difficulty_level,
+      option1,
+      option2,
+      option3,
+      option4,
+    };
+
+    // Add to questions array
+    questions.questions.push(newQuestion);
+
+    return NextResponse.json({
+      message: "Question created successfully",
+      question: {
+        id: newQuestion.id,
+        text: newQuestion.text,
+      },
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function GET(request: Request) {
   try {
     const headersList = await headers();
