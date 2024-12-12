@@ -111,7 +111,7 @@ export default function Navbar() {
                     <Link href="/designer/questions" className="nav-link">
                       مدیریت سوالات
                     </Link>
-                    <Link href="/designer/analytics" className="nav-link">
+                    <Link href="/designer/categories" className="nav-link">
                       مدیریت دسته‌بندی‌ها
                     </Link>
                   </>
@@ -221,7 +221,7 @@ export default function Navbar() {
                       مدیریت سوالات
                     </Link>
                     <Link
-                      href="/designer/analytics"
+                      href="/designer/categories"
                       className="nav-link"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
