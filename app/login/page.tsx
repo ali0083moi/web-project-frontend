@@ -1,8 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+const checkAuth = () => {
+  const user = localStorage.getItem("user");
+  if (user) {
+    const userData = JSON.parse(user);
+    return userData.role === "player"
+      ? "/player/dashboard"
+      : "/designer/dashboard";
+  }
+  return null;
+};
 
 export default function Login() {
   const router = useRouter();
@@ -12,6 +23,13 @@ export default function Login() {
     password: "",
     rememberMe: false,
   });
+
+  useEffect(() => {
+    const redirectPath = checkAuth();
+    if (redirectPath) {
+      router.push(redirectPath);
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,7 +169,7 @@ export default function Login() {
                   href="/register"
                   className="text-white font-medium hover:text-purple-200 transition-colors"
                 >
-                  ثبت نام کنید
+                  ثبت ن��م کنید
                 </Link>
               </p>
             </div>

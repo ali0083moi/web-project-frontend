@@ -1,8 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+const checkAuth = () => {
+  const user = localStorage.getItem("user");
+  if (user) {
+    const userData = JSON.parse(user);
+    return userData.role === "player"
+      ? "/player/dashboard"
+      : "/designer/dashboard";
+  }
+  return null;
+};
 
 export default function Register() {
   const router = useRouter();
@@ -19,6 +30,13 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    const redirectPath = checkAuth();
+    if (redirectPath) {
+      router.push(redirectPath);
+    }
+  }, [router]);
 
   const validatePasswords = () => {
     let isValid = true;
