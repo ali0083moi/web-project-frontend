@@ -169,7 +169,7 @@ export default function Login() {
                   href="/register"
                   className="text-white font-medium hover:text-purple-200 transition-colors"
                 >
-                  ثبت ن��م کنید
+                  ثبت نام کنید
                 </Link>
               </p>
             </div>

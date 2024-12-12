@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Plus, Filter, Pencil, Trash2 } from "lucide-react";
 import CategoryModal from "@/components/CategoryModal";
+import { useToast } from "@/components/ui/use-toast";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 interface Category {
   id: number;
@@ -12,9 +14,14 @@ interface Category {
 }
 
 export default function CategoriesPage() {
+  const { toast } = useToast();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [deletingCategoryId, setDeletingCategoryId] = useState<number | null>(
+    null
+  );
 
   const fetchCategories = async () => {
     try {
@@ -28,7 +35,11 @@ export default function CategoriesPage() {
         setCategories(data.categories);
       }
     } catch (error) {
-      alert("خطا در دریافت دسته‌بندی‌ها");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در دریافت دسته‌بندی‌ها",
+      });
     }
   };
 
@@ -57,13 +68,28 @@ export default function CategoriesPage() {
       });
 
       if (response.ok) {
-        alert("دسته‌بندی با موفقیت ایجاد شد");
+        toast({
+          variant: "success",
+          title: "موفقیت",
+          description: "دسته‌بندی با موفقیت ایجاد شد",
+          duration: 3000,
+        });
         fetchCategories();
       } else {
-        alert("خطا در ایجاد دسته‌بندی");
+        toast({
+          variant: "destructive",
+          title: "خطا",
+          description: "خطا در ایجاد دسته‌بندی",
+          duration: 3000,
+        });
       }
     } catch (error) {
-      alert("خطا در ایجاد دسته‌بندی");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در ایجاد دسته‌بندی",
+        duration: 3000,
+      });
     }
   };
 
@@ -87,21 +113,41 @@ export default function CategoriesPage() {
       });
 
       if (response.ok) {
-        alert("دسته‌بندی با موفقیت بروزرسانی شد");
+        toast({
+          variant: "success",
+          title: "موفقیت",
+          description: "دسته‌بندی با موفقیت بروزرسانی شد",
+          duration: 3000,
+        });
         fetchCategories();
       } else {
-        alert("خطا در بروزرسانی دسته‌بندی");
+        toast({
+          variant: "destructive",
+          title: "خطا",
+          description: "خطا در بروزرسانی دسته‌بندی",
+          duration: 3000,
+        });
       }
     } catch (error) {
-      alert("خطا در بروزرسانی دسته‌بندی");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در بروزرسانی دسته‌بندی",
+        duration: 3000,
+      });
     }
   };
 
   const handleDeleteCategory = async (id: number) => {
-    if (!confirm("آیا از حذف این دسته‌بندی اطمینان دارید؟")) return;
+    setDeletingCategoryId(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingCategoryId) return;
 
     try {
-      const response = await fetch(`/api/categories/${id}`, {
+      const response = await fetch(`/api/categories/${deletingCategoryId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -109,14 +155,29 @@ export default function CategoriesPage() {
       });
 
       if (response.ok) {
-        alert("دسته‌بندی با موفقیت حذف شد");
+        toast({
+          variant: "success",
+          title: "موفقیت",
+          description: "دسته‌بندی با موفقیت حذف شد",
+          duration: 3000,
+        });
         fetchCategories();
       } else {
         const data = await response.json();
-        alert(data.error || "خطا در حذف دسته‌بندی");
+        toast({
+          variant: "destructive",
+          title: "خطا",
+          description: data.error || "خطا در حذف دسته‌بندی",
+          duration: 3000,
+        });
       }
     } catch (error) {
-      alert("خطا در حذف دسته‌بندی");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در حذف دسته‌بندی",
+        duration: 3000,
+      });
     }
   };
 
@@ -133,10 +194,18 @@ export default function CategoriesPage() {
         setEditingCategory(data);
         setIsModalOpen(true);
       } else {
-        alert("خطا در دریافت اطلاعات دسته‌بندی");
+        toast({
+          variant: "destructive",
+          title: "خطا",
+          description: "خطا در دریافت اطلاعات دسته‌بندی",
+        });
       }
     } catch (error) {
-      alert("خطا در دریافت اطلاعات دسته‌بندی");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در دریافت اطلاعات دسته‌بندی",
+      });
     }
   };
 
@@ -214,6 +283,14 @@ export default function CategoriesPage() {
           }
           initialData={editingCategory || undefined}
           title={editingCategory ? "ویرایش دسته‌بندی" : "افزودن دسته‌بندی جدید"}
+        />
+
+        <ConfirmationModal
+          isOpen={isConfirmModalOpen}
+          onClose={() => setIsConfirmModalOpen(false)}
+          onConfirm={confirmDelete}
+          title="حذف دسته‌بندی"
+          description="آیا از حذف این دسته‌بندی اطمینان دارید؟ این عمل قابل بازگشت نیست."
         />
       </div>
     </div>

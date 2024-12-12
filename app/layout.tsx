@@ -5,7 +5,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/shared/navbar";
 import { ThemeProvider } from "./providers/theme-provider";
 import Footer from "@/components/shared/footer";
-
+import { Toaster } from "@/components/ui/toaster";
 export const metadata: Metadata = {
   title: "کوئیزلند",
   description: "کوئیزلند",
@@ -30,6 +30,7 @@ export default function RootLayout({
             <main className="w-full flex-grow">{children}</main>
             <Footer />
           </ThemeProvider>
+          <Toaster />
         </body>
       </html>
     </AuthProvider>
