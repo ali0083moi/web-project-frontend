@@ -4,6 +4,12 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const checkAuth = async () => {
   const user = localStorage.getItem("user");
@@ -53,6 +59,7 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   useEffect(() => {
     const checkAndRedirect = async () => {
@@ -310,15 +317,66 @@ export default function Register() {
                 className="mr-2 text-sm text-white/80 select-none"
               >
                 <span>با </span>
-                <Link
-                  href="/terms"
-                  className="text-white hover:text-purple-200 transition-colors"
+                <button
+                  type="button"
+                  onClick={() => setIsTermsModalOpen(true)}
+                  className="text-white hover:text-purple-200 transition-colors underline"
                 >
                   قوانین و مقررات
-                </Link>
+                </button>
                 <span> موافقم</span>
               </label>
             </div>
+
+            {/* Add Terms Modal */}
+            <Dialog open={isTermsModalOpen} onOpenChange={setIsTermsModalOpen}>
+              <DialogContent className="bg-gradient-to-br from-purple-900 to-purple-950 text-white border-none shadow-2xl max-w-2xl w-[95%] rounded-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-bold text-center mb-4">
+                    قوانین و مقررات
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 text-white/80 text-right">
+                  <h3 className="font-bold text-white">۱. قوانین کلی</h3>
+                  <p>
+                    کاربران موظف به رعایت قوانین و مقررات سایت هستند. هرگونه
+                    تخلف منجر به مسدود شدن حساب کاربری خواهد شد.
+                  </p>
+
+                  <h3 className="font-bold text-white">۲. حریم خصوصی</h3>
+                  <p>
+                    اطلاعات شخصی کاربران محرمانه باقی خواهد ماند و تنها برای
+                    بهبود خدمات سایت مورد استفاده قرار می‌گیرد.
+                  </p>
+
+                  <h3 className="font-bold text-white">۳. محتوای سایت</h3>
+                  <p>
+                    کاربران در قبال محتوای ارسالی خود مسئول هستند. انتشار محتوای
+                    نامناسب یا خلاف قوانین ممنوع است.
+                  </p>
+
+                  <h3 className="font-bold text-white">۴. حقوق مالکیت معنوی</h3>
+                  <p>
+                    تمامی حقوق مالکیت معنوی سایت متعلق به کوئیزلند است. استفاده
+                    غیرمجاز از محتوای سایت پیگرد قانونی دارد.
+                  </p>
+
+                  <h3 className="font-bold text-white">۵. تغییرات</h3>
+                  <p>
+                    کوئیزلند حق تغییر در قوانین و مقررات را برای خود محفوظ
+                    می‌دارد. کاربران موظف به بررسی دوره‌ای قوانین هستند.
+                  </p>
+                </div>
+                <div className="flex justify-center mt-6">
+                  <button
+                    onClick={() => setIsTermsModalOpen(false)}
+                    className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                  >
+                    بستن
+                  </button>
+                </div>
+              </DialogContent>
+            </Dialog>
 
             {/* Submit Button */}
             <button
