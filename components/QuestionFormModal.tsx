@@ -104,19 +104,22 @@ export default function QuestionFormModal({
         },
       });
 
-      setAvailableQuestions(response.data.questions || []);
-
-      // Update form data with the received question details
-      setFormData({
-        ...formData,
-        text: response.data.text,
-        option1: response.data.option1,
-        option2: response.data.option2,
-        option3: response.data.option3,
-        option4: response.data.option4,
-        category_id: getCategoryId(response.data.category),
-        difficulty_level: response.data.difficulty,
-      });
+      if (response.data) {
+        setAvailableQuestions(response.data.questions || []);
+        
+        // Update form data with the received question details
+        setFormData({
+          text: response.data.text || "",
+          option1: response.data.option1 || "",
+          option2: response.data.option2 || "",
+          option3: response.data.option3 || "",
+          option4: response.data.option4 || "",
+          category_id: getCategoryId(response.data.category) || 0,
+          difficulty_level: response.data.difficulty || "easy",
+          correct_answer: response.data.correct_answer || 1,
+          related_question_ids: response.data.related_question_ids || [],
+        });
+      }
     } catch (error) {
       console.error("Error fetching questions:", error);
       setAvailableQuestions([]);

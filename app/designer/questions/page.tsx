@@ -6,6 +6,7 @@ import { Plus, Filter, Loader2, Pencil, Trash2, Search, X } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
 import QuestionFormModal from "@/components/QuestionFormModal";
 import axios from "axios";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 interface Question {
   id: number;
@@ -32,6 +33,8 @@ export default function QuestionsPage() {
   const [categories, setCategories] = useState<string[]>(["همه"]);
   const difficulties = ["همه", "easy", "medium", "hard"];
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -85,18 +88,23 @@ export default function QuestionsPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm("آیا از حذف این سوال اطمینان دارید؟")) {
-      try {
-        await axios.delete(`/api/questions/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        fetchQuestions();
-      } catch (error) {
-        console.error("Error deleting question:", error);
-      }
+  const handleDeleteClick = (id: number) => {
+    setQuestionToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!questionToDelete) return;
+
+    try {
+      await axios.delete(`/api/questions/${questionToDelete}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      fetchQuestions();
+    } catch (error) {
+      console.error("Error deleting question:", error);
     }
   };
 
@@ -285,7 +293,7 @@ export default function QuestionsPage() {
                             <Pencil className="w-4 h-4 text-white" />
                           </button>
                           <button
-                            onClick={() => handleDelete(question.id)}
+                            onClick={() => handleDeleteClick(question.id)}
                             className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4 text-red-400" />
@@ -320,6 +328,14 @@ export default function QuestionsPage() {
             question={editingQuestion}
           />
         )}
+
+        <ConfirmationModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleConfirmDelete}
+          title="حذف سوال"
+          description="آیا از حذف این سوال اطمینان دارید؟"
+        />
       </div>
     </div>
   );
