@@ -12,6 +12,7 @@ import axios from "axios";
 interface Question {
   id: number;
   text: string;
+  category: string;
   category_id: number;
   difficulty: string;
   option1?: string;
@@ -71,19 +72,9 @@ export default function QuestionFormModal({
 
   useEffect(() => {
     fetchCategories();
-    fetchAvailableQuestions();
-    if (question) {
-      setFormData({
-        text: question.text,
-        category_id: question.category_id,
-        difficulty_level: question.difficulty,
-        option1: question.option1 || "",
-        option2: question.option2 || "",
-        option3: question.option3 || "",
-        option4: question.option4 || "",
-        correct_answer: question.correct_answer || 1,
-        related_question_ids: (question.related_question_ids || []).map(String),
-      });
+    fetchAllQuestions();
+    if (question?.id) {
+      fetchAvailableQuestions();
     }
   }, [question]);
 
@@ -102,15 +93,63 @@ export default function QuestionFormModal({
 
   const fetchAvailableQuestions = async () => {
     try {
+      if (!question?.id) {
+        setAvailableQuestions([]);
+        return;
+      }
+
+      const response = await axios.get(`/api/questions/${question.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setAvailableQuestions(response.data.questions || []);
+
+      // Update form data with the received question details
+      setFormData({
+        ...formData,
+        text: response.data.text,
+        option1: response.data.option1,
+        option2: response.data.option2,
+        option3: response.data.option3,
+        option4: response.data.option4,
+        category_id: getCategoryId(response.data.category),
+        difficulty_level: response.data.difficulty,
+      });
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      setAvailableQuestions([]);
+    }
+  };
+
+  const fetchAllQuestions = async () => {
+    try {
       const response = await axios.get("/api/questions", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setAvailableQuestions(response.data.questions);
+      setAvailableQuestions(response.data.questions || []);
     } catch (error) {
-      console.error("Error fetching questions:", error);
+      console.error("Error fetching all questions:", error);
+      setAvailableQuestions([]);
     }
+  };
+
+  // Helper function to get category_id from category name
+  const getCategoryId = (categoryName: string): number => {
+    const categoryMap: { [key: string]: number } = {
+      جغرافیا: 1,
+      کامپیوتر: 2,
+      نجوم: 3,
+      فیزیک: 4,
+      شیمی: 5,
+      تاریخ: 6,
+      زیست‌شناسی: 7,
+      پزشکی: 8,
+    };
+    return categoryMap[categoryName] || 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -274,7 +313,7 @@ export default function QuestionFormModal({
             </label>
             <div className="relative">
               <div className="w-full bg-white/10 rounded-lg px-4 py-3 text-right min-h-[8rem] max-h-48 overflow-y-auto">
-                {availableQuestions
+                {(availableQuestions || [])
                   .filter((q) => q.id !== question?.id)
                   .map((q) => (
                     <div
