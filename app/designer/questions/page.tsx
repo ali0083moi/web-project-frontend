@@ -11,8 +11,15 @@ interface Question {
   id: number;
   text: string;
   category: string;
+  category_id: number;
   difficulty: string;
   created_at: string;
+  option1?: string;
+  option2?: string;
+  option3?: string;
+  option4?: string;
+  correct_answer?: number;
+  related_question_ids?: number[];
 }
 
 export default function QuestionsPage() {
