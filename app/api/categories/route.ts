@@ -76,3 +76,45 @@ export async function GET() {
 
   return NextResponse.json(categories);
 }
+
+export async function POST(request: Request) {
+  const headersList = await headers();
+  const token = headersList.get("authorization");
+
+  if (!token || !token.startsWith("Bearer ")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const { name, description, created_by } = body;
+
+  if (!name || !description || !created_by) {
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
+
+  // Generate new ID
+  const newId = categories.categories.length + 1;
+
+  // Create new category
+  const newCategory = {
+    id: newId,
+    name,
+    description,
+    question_count: 0,
+  };
+
+  // Add to categories array
+  categories.categories.push(newCategory);
+
+  return NextResponse.json({
+    message: "Category created successfully",
+    category: {
+      id: newId,
+      name,
+      description,
+    },
+  });
+}
