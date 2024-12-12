@@ -5,15 +5,36 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
-const checkAuth = () => {
+const checkAuth = async () => {
   const user = localStorage.getItem("user");
-  if (user) {
+  const cookieStore = document.cookie;
+  const hasAuthToken = cookieStore.includes("auth-token=");
+
+  if (!user || !hasAuthToken) {
+    return null;
+  }
+
+  try {
+    const response = await fetch("/api/auth/check", {
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    if (!data.user) {
+      return null;
+    }
+
     const userData = JSON.parse(user);
     return userData.role === "player"
       ? "/player/dashboard"
       : "/designer/dashboard";
+  } catch (error) {
+    return null;
   }
-  return null;
 };
 
 export default function Login() {
@@ -27,10 +48,14 @@ export default function Login() {
   });
 
   useEffect(() => {
-    const redirectPath = checkAuth();
-    if (redirectPath) {
-      router.push(redirectPath);
-    }
+    const checkAndRedirect = async () => {
+      const redirectPath = await checkAuth();
+      if (redirectPath) {
+        router.push(redirectPath);
+      }
+    };
+
+    checkAndRedirect();
   }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
