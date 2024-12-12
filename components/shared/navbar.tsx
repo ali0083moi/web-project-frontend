@@ -138,9 +138,6 @@ export default function Navbar() {
                 <Link href="/about" className="nav-link">
                   درباره ما
                 </Link>
-                <Link href="/contact" className="nav-link">
-                  تماس با ما
-                </Link>
                 <Link href="/login" className="btn-secondary">
                   ورود
                 </Link>
@@ -252,13 +249,6 @@ export default function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   درباره ما
-                </Link>
-                <Link
-                  href="/contact"
-                  className="nav-link"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  تماس با ما
                 </Link>
               </>
             )}

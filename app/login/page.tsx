@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const checkAuth = () => {
   const user = localStorage.getItem("user");
@@ -17,6 +18,7 @@ const checkAuth = () => {
 
 export default function Login() {
   const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -50,12 +52,24 @@ export default function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "خطا در ورود به حساب کاربری");
+        toast({
+          variant: "destructive",
+          title: "خطا",
+          description: data.error || "خطا در ورود به حساب کاربری",
+          duration: 3000,
+        });
         return;
       }
 
       document.cookie = `auth-token=${data.token}; path=/; max-age=2592000; SameSite=Strict`;
       localStorage.setItem("user", JSON.stringify(data.user));
+
+      toast({
+        variant: "success",
+        title: "موفقیت",
+        description: "با موفقیت وارد شدید",
+        duration: 3000,
+      });
 
       window.dispatchEvent(new Event("auth-change"));
       if (data.user.role === "player") {
@@ -64,7 +78,12 @@ export default function Login() {
         router.push("/designer/dashboard");
       }
     } catch (error) {
-      alert("خطا در برقراری ارتباط با سرور");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در برقراری ارتباط با سرور",
+        duration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import UserCard from "@/components/UserCard";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useToast } from "@/components/ui/use-toast";
 
 interface User {
   id: string;
@@ -30,6 +31,7 @@ interface UserDetails extends User {
 }
 
 export default function UsersPage() {
+  const { toast } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -95,10 +97,20 @@ export default function UsersPage() {
             user.id === userId ? { ...user, followed: true } : user
           )
         );
-        alert("با موفقیت دنبال شد!");
+        toast({
+          variant: "success",
+          title: "موفقیت",
+          description: "با موفقیت دنبال شد!",
+          duration: 3000,
+        });
       }
     } catch (error) {
-      console.error("Error following user:", error);
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در دنبال کردن کاربر",
+        duration: 3000,
+      });
     }
   };
 
@@ -116,10 +128,20 @@ export default function UsersPage() {
             user.id === userId ? { ...user, followed: false } : user
           )
         );
-        alert("با موفقیت لغو دنبال شد!");
+        toast({
+          variant: "success",
+          title: "موفقیت",
+          description: "با موفقیت لغو دنبال شد!",
+          duration: 3000,
+        });
       }
     } catch (error) {
-      console.error("Error unfollowing user:", error);
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در لغو دنبال کردن کاربر",
+        duration: 3000,
+      });
     }
   };
 
@@ -155,8 +177,12 @@ export default function UsersPage() {
       setSelectedUser(data.user);
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Error fetching user details:", error);
-      alert("Could not load user details. Please try again later.");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در دریافت اطلاعات کاربر. لطفاً دوباره تلاش کنید.",
+        duration: 3000,
+      });
     }
   };
 

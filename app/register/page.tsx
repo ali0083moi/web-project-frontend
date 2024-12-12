@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const checkAuth = () => {
   const user = localStorage.getItem("user");
@@ -17,6 +18,7 @@ const checkAuth = () => {
 
 export default function Register() {
   const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -81,17 +83,31 @@ export default function Register() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "خطا در ثبت نام");
+        toast({
+          variant: "destructive",
+          title: "خطا",
+          description: data.error || "خطا در ثبت نام",
+          duration: 3000,
+        });
         return;
       }
 
-      // Show success message
-      alert("ثبت نام با موفقیت انجام شد. لطفاً وارد شوید.");
+      toast({
+        variant: "success",
+        title: "موفقیت",
+        description: "ثبت نام با موفقیت انجام شد. لطفاً وارد شوید.",
+        duration: 3000,
+      });
 
       // Redirect to login page
       router.push("/login");
     } catch (error) {
-      alert("خطا در برقراری ارتباط با سرور");
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در برقراری ارتباط با سرور",
+        duration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }
