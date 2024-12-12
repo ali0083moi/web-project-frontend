@@ -7,7 +7,7 @@ const mockUsers = [
     id: "1234",
     email: "test@example.com",
     username: "Ali Ahmadi",
-    role: "player",
+    role: "designer",
     points: 1200,
     followings: 400,
     followers: 200,

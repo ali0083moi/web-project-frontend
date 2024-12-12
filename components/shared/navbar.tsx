@@ -106,13 +106,13 @@ export default function Navbar() {
                 {user.role === "designer" && (
                   <>
                     <Link href="/designer/dashboard" className="nav-link">
-                      داشبورد طراح
+                      داشبورد
                     </Link>
                     <Link href="/designer/questions" className="nav-link">
                       مدیریت سوالات
                     </Link>
                     <Link href="/designer/analytics" className="nav-link">
-                      آمار و تحلیل
+                      مدیریت دسته‌بندی‌ها
                     </Link>
                   </>
                 )}
@@ -211,7 +211,7 @@ export default function Navbar() {
                       className="nav-link"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      داشبورد طراح
+                      داشبورد
                     </Link>
                     <Link
                       href="/designer/questions"
@@ -225,7 +225,7 @@ export default function Navbar() {
                       className="nav-link"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      آمار و تحلیل
+                      مدیریت دسته‌بندی‌ها
                     </Link>
                   </>
                 )}

@@ -26,22 +26,18 @@ interface AnswerResponse {
   correct_answer?: string;
 }
 
-const categories = [
-  "همه",
-  "تاریخ",
-  "جغرافیا",
-  "کامپیوتر",
-  "نجوم",
-  "فیزیک",
-  "شیمی",
-  "زیست‌شناسی",
-  "پزشکی",
-];
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  question_count: number;
+}
 
 const difficulties = ["همه", "easy", "medium", "hard"];
 
 export default function QuestionsPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [categories, setCategories] = useState<string[]>(["همه"]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("همه");
   const [selectedDifficulty, setSelectedDifficulty] = useState("همه");
@@ -54,8 +50,29 @@ export default function QuestionsPage() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
     fetchQuestions();
   }, [selectedCategory, selectedDifficulty]);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("/api/categories", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const categoryNames = [
+        "همه",
+        ...response.data.categories.map((cat: Category) => cat.name),
+      ];
+      setCategories(categoryNames);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   const fetchQuestions = async () => {
     setLoading(true);
