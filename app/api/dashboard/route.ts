@@ -36,7 +36,11 @@ export async function GET(request: Request) {
     const cookieStore = await cookies();
     const token = cookieStore.get("auth-token");
 
-    if (!token || token.value !== "mock_jwt_token_12345") {
+    if (
+      !token ||
+      (token.value !== "mock_jwt1_token_12345" &&
+        token.value !== "mock_jwt2_token_12345")
+    ) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
