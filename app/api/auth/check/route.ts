@@ -7,7 +7,7 @@ const mockUsers = [
     id: "1234",
     email: "test@example.com",
     username: "Ali Ahmadi",
-    role: "designer",
+    role: "player",
     points: 1200,
     followings: 400,
     followers: 200,
@@ -35,8 +35,10 @@ export async function GET() {
   try {
     // Since we're using a mock token, we'll just return the mock user
     // In a real app, you would verify the JWT token here
-    if (token.value === "mock_jwt_token_12345") {
+    if (token.value === "mock_jwt1_token_12345") {
       return NextResponse.json({ user: mockUsers[0] });
+    } else if (token.value === "mock_jwt2_token_12345") {
+      return NextResponse.json({ user: mockUsers[1] });
     }
 
     return NextResponse.json({ user: null });

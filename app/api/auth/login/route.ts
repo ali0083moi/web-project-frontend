@@ -25,6 +25,11 @@ const mockUsers = [
   },
 ];
 
+const mockJwtToken: Record<string, string> = {
+  "test@example.com": "mock_jwt1_token_12345",
+  "test2@example.com": "mock_jwt2_token_12345",
+};
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -51,7 +56,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         message: "Login successful",
-        token: "mock_jwt_token_12345",
+        token: mockJwtToken[email],
         user: userWithoutPassword,
       },
       { status: 200 }
