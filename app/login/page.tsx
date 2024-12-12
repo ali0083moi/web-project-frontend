@@ -108,33 +108,6 @@ export default function Login() {
               />
             </div>
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  checked={formData.rememberMe}
-                  onChange={(e) =>
-                    setFormData({ ...formData, rememberMe: e.target.checked })
-                  }
-                  className="h-4 w-4 rounded border-white/10 bg-white/5 text-purple-500 focus:ring-purple-500"
-                />
-                <label
-                  htmlFor="remember"
-                  className="mr-2 text-sm text-white/80 select-none"
-                >
-                  مرا به خاطر بسپار
-                </label>
-              </div>
-              <Link
-                href="/forgot-password"
-                className="text-sm text-white/80 hover:text-white transition-colors"
-              >
-                فراموشی رمز عبور؟
-              </Link>
-            </div>
-
             {/* Submit Button */}
             <button
               type="submit"

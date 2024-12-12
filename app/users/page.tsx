@@ -312,7 +312,7 @@ export default function UsersPage() {
                     </div>
                   </div>
                   <div className="text-center p-3 bg-white/10 rounded-lg">
-                    <div className="text-sm text-white/80">نبال‌شده‌ها</div>
+                    <div className="text-sm text-white/80">دنبال‌شده‌ها</div>
                     <div className="font-bold text-white">
                       {selectedUser.following}
                     </div>
