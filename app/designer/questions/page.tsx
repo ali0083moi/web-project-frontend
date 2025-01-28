@@ -61,7 +61,7 @@ export default function QuestionsPage() {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      let url = "/api/questions/my";
+      let url = "http://localhost:8080/api/questions/my";
       const params = new URLSearchParams();
 
       if (selectedCategory !== "همه") {
@@ -77,7 +77,12 @@ export default function QuestionsPage() {
 
       const response = await axios.get(url, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
         },
       });
       setQuestions(response.data.questions);
@@ -97,11 +102,19 @@ export default function QuestionsPage() {
     if (!questionToDelete) return;
 
     try {
-      await axios.delete(`/api/questions/${questionToDelete}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await axios.delete(
+        `http://localhost:8080/api/questions/${questionToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
       fetchQuestions();
     } catch (error) {
       console.error("Error deleting question:", error);

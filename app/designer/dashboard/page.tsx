@@ -56,11 +56,19 @@ export default function PlayerDashboard() {
 
   const handleRandomQuestion = async () => {
     try {
-      const response = await axios.get("/api/questions/random", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:8080/api/questions/random",
+        {
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
       setRandomQuestion(response.data);
       setShowRandomQuestion(true);
     } catch (error) {
@@ -82,9 +90,14 @@ export default function PlayerDashboard() {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }),
-          fetch("/api/questions/my", {
+          fetch("http://localhost:8080/api/questions/my", {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("auth-token="))
+                  ?.split("=")[1] || ""
+              }`,
             },
           }),
         ]);

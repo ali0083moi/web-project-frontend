@@ -64,11 +64,19 @@ export default function QuestionBox({
 
   const fetchQuestionDetails = async (id: string) => {
     try {
-      const response = await axios.get(`/api/questions/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:8080/api/questions/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching question details:", error);
@@ -79,14 +87,19 @@ export default function QuestionBox({
   const handleAnswerSubmit = async (optionNumber: number) => {
     try {
       const response = await axios.post(
-        "/api/answers",
+        "http://localhost:8080/api/answers",
         {
           question_id: selectedQuestion?.id,
           selected_option: `option${optionNumber + 1}`,
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
           },
         }
       );

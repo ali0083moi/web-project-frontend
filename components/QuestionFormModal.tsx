@@ -98,11 +98,19 @@ export default function QuestionFormModal({
         return;
       }
 
-      const response = await axios.get(`/api/questions/${question.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:8080/api/questions/${question.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
 
       if (response.data) {
         setAvailableQuestions(response.data.questions || []);
@@ -128,9 +136,14 @@ export default function QuestionFormModal({
 
   const fetchAllQuestions = async () => {
     try {
-      const response = await axios.get("/api/questions", {
+      const response = await axios.get("http://localhost:8080/api/questions", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
         },
       });
       setAvailableQuestions(response.data.questions || []);
@@ -161,15 +174,28 @@ export default function QuestionFormModal({
 
     try {
       if (question) {
-        await axios.put(`/api/questions/${question.id}`, formData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+        await axios.put(
+          `http://localhost:8080/api/questions/${question.id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("auth-token="))
+                  ?.split("=")[1] || ""
+              }`,
+            },
         });
       } else {
-        await axios.post("/api/questions", formData, {
+        await axios.post("http://localhost:8080/api/questions", formData, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
           },
         });
         setFormData(initialFormState);
