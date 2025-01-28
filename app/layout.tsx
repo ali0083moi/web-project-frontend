@@ -19,7 +19,10 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="fa" dir="rtl" suppressHydrationWarning>
-        <body className="font-vazir h-screen flex flex-col">
+        <body
+          className="font-vazir h-screen flex flex-col"
+          suppressHydrationWarning
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
