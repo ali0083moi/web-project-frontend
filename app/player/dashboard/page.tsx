@@ -60,7 +60,12 @@ export default function PlayerDashboard() {
     try {
       const response = await axios.get("/api/questions/random", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
         },
       });
       setRandomQuestion(response.data);
