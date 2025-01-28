@@ -3,7 +3,7 @@ import { Question } from "./Question";
 import { Answer } from "./Answer";
 import { Follow } from "./Follow";
 
-export type UserRole = "DESIGNER" | "PLAYER";
+export type UserRole = "designer" | "player";
 
 export interface User {
   id: string;

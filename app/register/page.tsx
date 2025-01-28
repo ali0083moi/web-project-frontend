@@ -106,6 +106,10 @@ export default function Register() {
     setIsLoading(true);
 
     try {
+      const avatar_url = `https://api.dicebear.com/7.x/pixel-art/png?seed=${encodeURIComponent(
+        formData.name
+      )}`;
+
       const response = await fetch("http://localhost:8080/api/auth/register", {
         method: "POST",
         headers: {
@@ -117,6 +121,7 @@ export default function Register() {
           password: formData.password,
           confirmPassword: formData.confirmPassword,
           role: formData.role,
+          avatar_url: avatar_url,
         }),
       });
 
@@ -139,7 +144,6 @@ export default function Register() {
         duration: 3000,
       });
 
-      // Redirect to login page
       router.push("/login");
     } catch (error) {
       toast({

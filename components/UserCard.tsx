@@ -16,7 +16,7 @@ interface UserCardProps {
   onFollow: (userId: string) => void;
   onUnfollow: (userId: string) => void;
   onShowDetails: (userId: string) => void;
-  getAvatarUrl: (username: string) => string;
+  avatarUrl: string;
 }
 
 export default function UserCard({
@@ -24,7 +24,7 @@ export default function UserCard({
   onFollow,
   onUnfollow,
   onShowDetails,
-  getAvatarUrl,
+  avatarUrl,
 }: UserCardProps) {
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 overflow-hidden bg-white/10 backdrop-blur-sm border-0">
@@ -33,7 +33,7 @@ export default function UserCard({
           <div className="relative w-24 h-24 mb-4">
             <div className="w-24 h-24 rounded-full overflow-hidden group-hover:scale-105 transition-transform duration-300">
               <img
-                src={user.avatar_url || getAvatarUrl(user.username)}
+                src={user.avatar_url || avatarUrl}
                 alt={user.username}
                 className="w-full h-full object-cover"
               />

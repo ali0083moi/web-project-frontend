@@ -171,11 +171,11 @@ export default function UsersPage() {
     }
   };
 
-  const getAvatarUrl = (username: string) => {
-    return `https://api.dicebear.com/7.x/pixel-art/png?seed=${encodeURIComponent(
-      username
-    )}`;
-  };
+  // const getAvatarUrl = (username: string) => {
+  //   return `https://api.dicebear.com/7.x/pixel-art/png?seed=${encodeURIComponent(
+  //     username
+  //   )}`;
+  // };
 
   const filteredUsers = users.filter(
     (user) =>
@@ -298,7 +298,7 @@ export default function UsersPage() {
               onFollow={handleFollow}
               onUnfollow={handleUnfollow}
               onShowDetails={handleShowDetails}
-              getAvatarUrl={getAvatarUrl}
+              avatarUrl={user.avatar_url}
             />
           ))}
         </div>
