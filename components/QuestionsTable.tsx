@@ -10,6 +10,10 @@ interface Question {
   difficulty: string;
   selected_option: string;
   is_correct: boolean;
+  option1?: string;
+  option2?: string;
+  option3?: string;
+  option4?: string;
 }
 
 interface QuestionsTableProps {
@@ -28,6 +32,14 @@ export default function QuestionsTable({ questions }: QuestionsTableProps) {
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300";
     }
+  };
+
+  const getSelectedOptionValue = (question: Question) => {
+    const optionNumber = question.selected_option?.replace("option", "");
+    return (
+      question[`option${optionNumber}` as keyof Question] ||
+      question.selected_option
+    );
   };
 
   return (
@@ -96,7 +108,7 @@ export default function QuestionsTable({ questions }: QuestionsTableProps) {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-white">
-                      {question.selected_option}
+                      {getSelectedOptionValue(question)}
                     </td>
                     <td className="px-6 py-4">
                       {question.is_correct ? (
