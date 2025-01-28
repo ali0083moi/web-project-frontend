@@ -59,9 +59,14 @@ export default function QuestionsPage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("/api/categories", {
+      const response = await axios.get("http://localhost:8080/api/categories", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
         },
       });
       const categoryNames = [

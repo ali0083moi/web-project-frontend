@@ -85,9 +85,14 @@ export default function PlayerDashboard() {
     const fetchData = async () => {
       try {
         const [dashboardResponse, questionsResponse] = await Promise.all([
-          fetch("/api/dashboard", {
+          fetch("http://localhost:8080/api/dashboard", {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("auth-token="))
+                  ?.split("=")[1] || ""
+              }`,
             },
           }),
           fetch("http://localhost:8080/api/questions/my", {

@@ -25,9 +25,14 @@ export default function CategoriesPage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/categories/my", {
+      const response = await fetch("http://localhost:8080/api/categories/my", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
         },
       });
       if (response.ok) {
@@ -55,11 +60,16 @@ export default function CategoriesPage() {
     description: string;
   }) => {
     try {
-      const response = await fetch("/api/categories", {
+      const response = await fetch("http://localhost:8080/api/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
         },
         body: JSON.stringify({
           ...data,
@@ -100,17 +110,25 @@ export default function CategoriesPage() {
     if (!editingCategory) return;
 
     try {
-      const response = await fetch(`/api/categories/${editingCategory.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          ...data,
-          created_by: JSON.parse(localStorage.getItem("user") || "{}").id,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/categories/${editingCategory.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+          body: JSON.stringify({
+            ...data,
+            created_by: JSON.parse(localStorage.getItem("user") || "{}").id,
+          }),
+        }
+      );
 
       if (response.ok) {
         toast({
@@ -147,12 +165,20 @@ export default function CategoriesPage() {
     if (!deletingCategoryId) return;
 
     try {
-      const response = await fetch(`/api/categories/${deletingCategoryId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/categories/${deletingCategoryId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
 
       if (response.ok) {
         toast({
@@ -183,11 +209,19 @@ export default function CategoriesPage() {
 
   const handleEditCategory = async (category: Category) => {
     try {
-      const response = await fetch(`/api/categories/${category.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/categories/${category.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();

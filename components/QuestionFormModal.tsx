@@ -80,11 +80,19 @@ export default function QuestionFormModal({
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("/api/categories/my", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:8080/api/categories/my",
+        {
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
       setCategories(response.data.categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
