@@ -290,9 +290,15 @@ export default function QuestionsPage() {
           <div className="flex items-center justify-center h-64">
             <Loader2 className="w-8 h-8 text-white animate-spin" />
           </div>
+        ) : questions.length === 0 ? (
+          <div className="flex items-center justify-center h-64">
+            <p className="text-white text-lg text-center">
+              هیچ سوال جدیدی که شما به آن پاسخ نداده باشید وجود ندارد.
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {questions.map((question, index) => (
+            {questions?.map((question, index) => (
               <QuestionBox
                 key={question.id}
                 question={question}

@@ -71,7 +71,7 @@ export default function QuestionsTable({ questions }: QuestionsTableProps) {
                 </tr>
               </thead>
               <tbody>
-                {questions.map((question, index) => (
+                {questions?.map((question, index) => (
                   <motion.tr
                     key={question.id}
                     initial={{ opacity: 0, x: -20 }}
