@@ -14,7 +14,6 @@ interface Question {
   category: string;
   category_id: number;
   difficulty: string;
-  created_at: string;
   option1?: string;
   option2?: string;
   option3?: string;
@@ -261,9 +260,6 @@ export default function QuestionsPage() {
                       سطح سختی
                     </th>
                     <th className="px-6 py-4 text-sm font-medium text-white/80">
-                      تاریخ ایجاد
-                    </th>
-                    <th className="px-6 py-4 text-sm font-medium text-white/80">
                       عملیات
                     </th>
                   </tr>
@@ -299,11 +295,6 @@ export default function QuestionsPage() {
                             ? "متوسط"
                             : "سخت"}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 text-white">
-                        {new Date(question.created_at).toLocaleDateString(
-                          "fa-IR"
-                        )}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">

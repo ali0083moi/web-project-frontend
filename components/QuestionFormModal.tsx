@@ -37,7 +37,7 @@ interface Category {
 
 interface FormData {
   text: string;
-  category_id: number;
+  category: string;
   difficulty_level: string;
   option1: string;
   option2: string;
@@ -55,7 +55,7 @@ export default function QuestionFormModal({
 }: QuestionFormModalProps) {
   const initialFormState: FormData = {
     text: "",
-    category_id: 0,
+    category: "",
     difficulty_level: "easy",
     option1: "",
     option2: "",
@@ -122,7 +122,7 @@ export default function QuestionFormModal({
 
       if (response.data) {
         setAvailableQuestions(response.data.questions || []);
-        
+
         // Update form data with the received question details
         setFormData({
           text: response.data.text || "",
@@ -130,7 +130,7 @@ export default function QuestionFormModal({
           option2: response.data.option2 || "",
           option3: response.data.option3 || "",
           option4: response.data.option4 || "",
-          category_id: getCategoryId(response.data.category) || 0,
+          category: response.data.category || "",
           difficulty_level: response.data.difficulty || "easy",
           correct_answer: response.data.correct_answer || 1,
           related_question_ids: response.data.related_question_ids || [],
@@ -163,17 +163,8 @@ export default function QuestionFormModal({
 
   // Helper function to get category_id from category name
   const getCategoryId = (categoryName: string): number => {
-    const categoryMap: { [key: string]: number } = {
-      جغرافیا: 1,
-      کامپیوتر: 2,
-      نجوم: 3,
-      فیزیک: 4,
-      شیمی: 5,
-      تاریخ: 6,
-      زیست‌شناسی: 7,
-      پزشکی: 8,
-    };
-    return categoryMap[categoryName] || 0;
+    const category = categories.find((cat) => cat.name === categoryName);
+    return category?.id || 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -194,7 +185,8 @@ export default function QuestionFormModal({
                   ?.split("=")[1] || ""
               }`,
             },
-        });
+          }
+        );
       } else {
         await axios.post("http://localhost:8080/api/questions", formData, {
           headers: {
@@ -254,11 +246,11 @@ export default function QuestionFormModal({
                 دسته‌بندی
               </label>
               <select
-                value={formData.category_id}
+                value={formData.category}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    category_id: Number(e.target.value),
+                    category: e.target.value,
                   })
                 }
                 className="w-full bg-white/10 rounded-lg px-4 py-3 text-right"
@@ -266,7 +258,7 @@ export default function QuestionFormModal({
               >
                 <option value="">انتخاب کنید</option>
                 {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
+                  <option key={category.id} value={category.name}>
                     {category.name}
                   </option>
                 ))}
