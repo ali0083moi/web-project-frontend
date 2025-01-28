@@ -128,10 +128,21 @@ export default function Navbar() {
                 )}
                 <button
                   onClick={async () => {
-                    const response = await fetch("/api/auth/logout", {
-                      method: "POST",
-                      credentials: "include",
-                    });
+                    const response = await fetch(
+                      "http://localhost:8080/api/auth/logout",
+                      {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                          Authorization: `Bearer ${
+                            document.cookie
+                              .split("; ")
+                              .find((row) => row.startsWith("auth-token="))
+                              ?.split("=")[1] || ""
+                          }`,
+                        },
+                      }
+                    );
 
                     if (response.ok) {
                       setUser(null);
@@ -171,10 +182,21 @@ export default function Navbar() {
               <>
                 <button
                   onClick={async () => {
-                    const response = await fetch("/api/auth/logout", {
-                      method: "POST",
-                      credentials: "include",
-                    });
+                    const response = await fetch(
+                      "http://localhost:8080/api/auth/logout",
+                      {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                          Authorization: `Bearer ${
+                            document.cookie
+                              .split("; ")
+                              .find((row) => row.startsWith("auth-token="))
+                              ?.split("=")[1] || ""
+                          }`,
+                        },
+                      }
+                    );
 
                     if (response.ok) {
                       setUser(null);
@@ -189,7 +211,7 @@ export default function Navbar() {
                 {user.role === "player" && (
                   <>
                     <Link
-                      href="/dashboard"
+                      href="/player/dashboard"
                       className="nav-link"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >

@@ -19,11 +19,19 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("/api/leaderboard", {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:8080/api/leaderboard",
+          {
+            headers: {
+              Authorization: `Bearer ${
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("auth-token="))
+                  ?.split("=")[1] || ""
+              }`,
+            },
+          }
+        );
         setPlayers(response.data.leaderboard);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);

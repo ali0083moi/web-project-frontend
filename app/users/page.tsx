@@ -27,7 +27,7 @@ interface User {
 
 interface UserDetails extends User {
   followers: number;
-  following: number;
+  followings: number;
 }
 
 export default function UsersPage() {
@@ -49,9 +49,14 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("/api/users", {
+      const response = await fetch("http://localhost:8080/api/users", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
         },
       });
       const data = await response.json();
@@ -67,10 +72,15 @@ export default function UsersPage() {
     try {
       setLoading(true);
       const response = await fetch(
-        `/api/users?query=${encodeURIComponent(query)}`,
+        `http://localhost:8080/api/users?query=${encodeURIComponent(query)}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
           },
         }
       );
@@ -85,12 +95,20 @@ export default function UsersPage() {
 
   const handleFollow = async (userId: string) => {
     try {
-      const response = await fetch(`/api/users/${userId}/follow`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/users/${userId}/follow`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
       if (response.ok) {
         setUsers(
           users.map((user) =>
@@ -116,12 +134,20 @@ export default function UsersPage() {
 
   const handleUnfollow = async (userId: string) => {
     try {
-      const response = await fetch(`/api/users/${userId}/unfollow`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/users/${userId}/unfollow`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
       if (response.ok) {
         setUsers(
           users.map((user) =>
@@ -159,22 +185,26 @@ export default function UsersPage() {
 
   const handleShowDetails = async (userId: string) => {
     try {
-      const response = await fetch(`/api/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("auth-token="))
+                ?.split("=")[1] || ""
+            }`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      if (!data.user) {
-        throw new Error("User data not found");
-      }
-
-      setSelectedUser(data.user);
+      const userData = await response.json();
+      setSelectedUser(userData);
       setIsModalOpen(true);
     } catch (error) {
       toast({
@@ -340,7 +370,7 @@ export default function UsersPage() {
                   <div className="text-center p-3 bg-white/10 rounded-lg">
                     <div className="text-sm text-white/80">دنبال‌شده‌ها</div>
                     <div className="font-bold text-white">
-                      {selectedUser.following}
+                      {selectedUser.followings}
                     </div>
                   </div>
                 </div>
