@@ -8,7 +8,6 @@ interface Question {
   text: string;
   category: string;
   difficulty: string;
-  created_at: string;
 }
 
 interface QuestionsTableProps {
@@ -76,9 +75,6 @@ export default function DesignerQuestionsTable({
                   <th className="px-6 py-4 text-sm font-medium text-white/80">
                     سطح سختی
                   </th>
-                  <th className="px-6 py-4 text-sm font-medium text-white/80">
-                    تاریخ ایجاد
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -105,9 +101,6 @@ export default function DesignerQuestionsTable({
                       >
                         {getDifficultyText(question.difficulty)}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 text-white">
-                      {question.created_at.split("T")[0]}
                     </td>
                   </motion.tr>
                 ))}
