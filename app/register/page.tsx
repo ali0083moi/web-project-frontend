@@ -21,8 +21,16 @@ const checkAuth = async () => {
   }
 
   try {
-    const response = await fetch("/api/auth/check", {
+    const response = await fetch("http://localhost:8080/api/dashboard", {
       credentials: "include",
+      headers: {
+        Authorization: `Bearer ${
+          document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("auth-token="))
+            ?.split("=")[1] || ""
+        }`,
+      },
     });
 
     if (!response.ok) {
