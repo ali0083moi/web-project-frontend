@@ -50,7 +50,7 @@ export default function DesignerQuestionsTable({
       className="bg-white/10 backdrop-blur-sm rounded-3xl p-8"
     >
       <h2 className="text-2xl font-bold text-white mb-6 text-right">
-        سوالات پاسخ داده شده
+        سوالات طراحی شده
       </h2>
       <div className="relative">
         {/* Gradient Overlays for Scroll Indication */}
@@ -78,7 +78,7 @@ export default function DesignerQuestionsTable({
                 </tr>
               </thead>
               <tbody>
-                {questions.map((question, index) => (
+                {questions?.map((question, index) => (
                   <motion.tr
                     key={question.id}
                     initial={{ opacity: 0, x: -20 }}
