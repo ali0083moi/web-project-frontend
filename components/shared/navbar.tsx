@@ -111,6 +111,9 @@ export default function Navbar() {
                     <Link href="/player/questions" className="nav-link">
                       چالش‌ها
                     </Link>
+                    <Link href="/player/questions/feed" className="nav-link">
+                      فید
+                    </Link>
                   </>
                 )}
                 {user.role === "designer" && (
@@ -230,6 +233,13 @@ export default function Navbar() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       چالش‌ها
+                    </Link>
+                    <Link
+                      href="/player/questions/feed"
+                      className="nav-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      فید
                     </Link>
                   </>
                 )}
