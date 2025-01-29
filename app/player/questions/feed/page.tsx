@@ -71,7 +71,7 @@ export default function QuestionsPage() {
       });
       const categoryNames = [
         "همه",
-        ...response.data.categories.map((cat: Category) => cat.name),
+        ...response.data.categories?.map((cat: Category) => cat.name),
       ];
       setCategories(categoryNames);
     } catch (error) {
@@ -232,7 +232,7 @@ export default function QuestionsPage() {
                                 focus:ring-2 focus:ring-white/20 transition-all duration-300
                                 backdrop-blur-md hover:bg-white/20"
                     >
-                      {categories.map((category) => (
+                      {categories?.map((category) => (
                         <option
                           key={category}
                           value={category}

@@ -276,7 +276,7 @@ export default function CategoriesPage() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {categories.map((category, index) => (
+          {categories?.map((category, index) => (
             <motion.div
               key={category.id}
               initial={{ opacity: 0, y: 20 }}

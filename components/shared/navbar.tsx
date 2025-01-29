@@ -9,6 +9,7 @@ import {
   XMarkIcon as XIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 interface User {
   role: "player" | "designer" | null;
@@ -20,6 +21,7 @@ export default function Navbar() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -35,8 +37,22 @@ export default function Navbar() {
             }`,
           },
         });
+        const data = await response.json();
+
+        if (
+          typeof data === "string" &&
+          data.toLowerCase().startsWith("error:")
+        ) {
+          toast({
+            variant: "destructive",
+            title: "خطا",
+            description: data.substring(6).trim(),
+            duration: 3000,
+          });
+          return;
+        }
+
         if (response.ok) {
-          const data = await response.json();
           if (data.user) {
             setUser(data.user);
           }
@@ -58,6 +74,47 @@ export default function Navbar() {
       window.removeEventListener("auth-change", checkAuth);
     };
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="))
+              ?.split("=")[1] || ""
+          }`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (typeof data === "string" && data.toLowerCase().startsWith("error:")) {
+        toast({
+          variant: "destructive",
+          title: "خطا",
+          description: data.substring(6).trim(),
+          duration: 3000,
+        });
+        return;
+      }
+
+      if (response.ok) {
+        setUser(null);
+        router.push("/");
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: "خطا در خروج از حساب کاربری",
+        duration: 3000,
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -129,31 +186,7 @@ export default function Navbar() {
                     </Link>
                   </>
                 )}
-                <button
-                  onClick={async () => {
-                    const response = await fetch(
-                      "http://localhost:8080/api/auth/logout",
-                      {
-                        method: "POST",
-                        credentials: "include",
-                        headers: {
-                          Authorization: `Bearer ${
-                            document.cookie
-                              .split("; ")
-                              .find((row) => row.startsWith("auth-token="))
-                              ?.split("=")[1] || ""
-                          }`,
-                        },
-                      }
-                    );
-
-                    if (response.ok) {
-                      setUser(null);
-                      router.push("/");
-                    }
-                  }}
-                  className="btn-secondary"
-                >
+                <button onClick={handleLogout} className="btn-secondary">
                   خروج
                 </button>
               </div>
@@ -183,32 +216,7 @@ export default function Navbar() {
           <div className="flex flex-col space-y-2 mt-2">
             {user ? (
               <>
-                <button
-                  onClick={async () => {
-                    const response = await fetch(
-                      "http://localhost:8080/api/auth/logout",
-                      {
-                        method: "POST",
-                        credentials: "include",
-                        headers: {
-                          Authorization: `Bearer ${
-                            document.cookie
-                              .split("; ")
-                              .find((row) => row.startsWith("auth-token="))
-                              ?.split("=")[1] || ""
-                          }`,
-                        },
-                      }
-                    );
-
-                    if (response.ok) {
-                      setUser(null);
-                      setIsMobileMenuOpen(false);
-                      router.push("/");
-                    }
-                  }}
-                  className="btn-secondary"
-                >
+                <button onClick={handleLogout} className="btn-secondary">
                   خروج
                 </button>
                 {user.role === "player" && (

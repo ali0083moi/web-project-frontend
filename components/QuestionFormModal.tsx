@@ -257,7 +257,7 @@ export default function QuestionFormModal({
                 required
               >
                 <option value="">انتخاب کنید</option>
-                {categories.map((category) => (
+                {categories?.map((category) => (
                   <option key={category.id} value={category.name}>
                     {category.name}
                   </option>

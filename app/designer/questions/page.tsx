@@ -57,7 +57,7 @@ export default function QuestionsPage() {
       );
       const categoryNames = [
         "همه",
-        ...response.data.categories.map((cat: any) => cat.name),
+        ...response.data.categories?.map((cat: any) => cat.name),
       ];
       setCategories(categoryNames);
     } catch (error) {
@@ -128,7 +128,7 @@ export default function QuestionsPage() {
     }
   };
 
-  const filteredQuestions = questions.filter((question) =>
+  const filteredQuestions = questions?.filter((question) =>
     question.text.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -195,7 +195,7 @@ export default function QuestionsPage() {
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="bg-white/10 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-white/20 min-w-[160px]"
             >
-              {categories.map((category) => (
+              {categories?.map((category) => (
                 <option
                   key={category}
                   value={category}
@@ -265,7 +265,7 @@ export default function QuestionsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredQuestions.map((question, index) => (
+                  {filteredQuestions?.map((question, index) => (
                     <motion.tr
                       key={question.id}
                       initial={{ opacity: 0, x: -20 }}
