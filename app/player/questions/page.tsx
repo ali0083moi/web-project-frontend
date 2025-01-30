@@ -303,6 +303,7 @@ export default function QuestionsPage() {
                 key={question.id}
                 question={question}
                 index={index}
+                onAnswerSubmit={fetchQuestions} // Add this prop
               />
             ))}
           </div>

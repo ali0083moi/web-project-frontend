@@ -34,12 +34,14 @@ interface QuestionBoxProps {
   question: Question;
   index: number;
   onQuestionClose?: () => void;
+  onAnswerSubmit?: () => void;
 }
 
 export default function QuestionBox({
   question,
   index,
   onQuestionClose,
+  onAnswerSubmit,
 }: QuestionBoxProps) {
   const [selectedQuestion, setSelectedQuestion] =
     useState<QuestionDetail | null>(null);
@@ -113,6 +115,7 @@ export default function QuestionBox({
         setSelectedQuestion(null);
         closeButtonRef.current?.click();
         onQuestionClose?.();
+        onAnswerSubmit?.();
       }, 3000);
     } catch (error) {
       console.error("Error submitting answer:", error);
