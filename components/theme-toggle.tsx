@@ -18,7 +18,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+      className="p-2 rounded-lg bg-white hover:bg-white/20 transition-colors text-black dark:text-white dark:bg-white/10"
     >
       {theme === "dark" ? "حالت روشن" : "حالت تاریک"}
     </button>
