@@ -19,9 +19,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Check for stored user data on initial load
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        if (userData) {
+          setUser(userData);
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing stored user data:", error);
+      localStorage.removeItem("user"); // Clear invalid data
     }
   }, []);
 
